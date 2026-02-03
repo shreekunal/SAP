@@ -2,8 +2,12 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}" showHeader="false">
-        <content style="padding: 1rem;">
-            <SearchField id="searchField" width="100%" placeholder="Search orders..." search="onSearch" liveChange="onSearch" />
+        <content>
+            <HBox justifyContent="SpaceBetween" alignItems="Center">
+                <SearchField id="searchField" width="80%" placeholder="Search orders..."
+                    search="onSearch" liveChange="onSearch" />
+                <Button id="btnAddOrder" text="Add Order" press="onOpenAddOrder" />
+            </HBox>
 
             <Table id="ordersTable" inset="false" growing="true" items="{path: '/SalesOrders'}">
                 <headerToolbar>
