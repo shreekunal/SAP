@@ -1,0 +1,13 @@
+{
+    "requires": {
+        "db": {
+            "credentials": {
+                "host": "localhost",
+                "port": 5432,
+                "database": "projectmanagementdb",
+                "user": "postgres",
+                "password": "postgres"
+            }
+        }
+    }
+}
