@@ -3,16 +3,19 @@
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}" showHeader="false">
         <content>
-            <HBox justifyContent="SpaceBetween" alignItems="Center">
-                <SearchField id="searchField" width="80%" placeholder="Search orders..."
-                    search="onSearch" liveChange="onSearch" />
-                <Button id="btnAddOrder" text="Add Order" press="onOpenAddOrder" />
-            </HBox>
+            <!-- <HBox justifyContent="SpaceBetween" alignItems="Center"> -->
+            <!-- <Button id="btnAddOrder" text="Add Order" press="onOpenAddOrder" /> -->
+            <!-- </HBox> -->
 
             <Table id="ordersTable" inset="false" growing="true" items="{path: '/SalesOrders'}">
                 <headerToolbar>
                     <Toolbar>
                         <Title text="Sales Orders" />
+                        <ToolbarSpacer />
+                        <SearchField id="searchField" width="80%" placeholder="Search orders..."
+                            search="onSearch" liveChange="onSearch" />
+                        <ToolbarSpacer />
+                        <Button text="Add Order" press="onOpenAddOrder"></Button>
                     </Toolbar>
                 </headerToolbar>
 
@@ -29,7 +32,7 @@
                 </columns>
 
                 <items>
-                    <ColumnListItem>
+                    <ColumnListItem type="Active" press="onShowOrderDetails">
                         <cells>
                             <Text text="{orderNo}" />
                             <Text text="{date}" />

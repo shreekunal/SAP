@@ -38,7 +38,9 @@ sap.ui.define([
         onOpenAddOrder: function () {
             var that = this;
             if (!this._oDialog) {
+                // load fragment with view-scoped id prefix to avoid duplicate global ids
                 Fragment.load({
+                    id: this.getView().getId() + "--addOrderFrag",
                     name: "project1.view.AddOrder",
                     controller: this
                 }).then(function (oDialog) {
@@ -77,8 +79,11 @@ sap.ui.define([
 
         onAddAttachment: function () {
             var oDialog = this._oDialog;
-            var sFileName = oDialog.byId("attachFileName").getValue();
-            var sMime = oDialog.byId("attachMimeType").getValue();
+            // Find inputs by traversing dialog content
+            var oVBox = oDialog.getContent()[0].getContent()[4]; // SimpleForm content index 4 is the Attachments VBox
+            var oHBox = oVBox.getItems()[0]; // First item in VBox is the HBox
+            var sFileName = oHBox.getItems()[0].getValue(); // First input in HBox
+            var sMime = oHBox.getItems()[1].getValue(); // Second input in HBox
             if (!sFileName) {
                 MessageToast.show("Please provide a file name");
                 return;
@@ -86,8 +91,8 @@ sap.ui.define([
             var a = this._oNewOrderModel.getProperty("/attachments") || [];
             a.push({ fileName: sFileName, mimeType: sMime });
             this._oNewOrderModel.setProperty("/attachments", a);
-            oDialog.byId("attachFileName").setValue("");
-            oDialog.byId("attachMimeType").setValue("");
+            oHBox.getItems()[0].setValue(""); // Clear file name input
+            oHBox.getItems()[1].setValue(""); // Clear mime type input
         },
 
         onRemoveAttachment: function (oEvent) {
@@ -133,6 +138,8 @@ sap.ui.define([
                 orderNo: oData.orderNo,
                 date: formatDateFlexible(oData.date),
                 customerName: oData.customerName,
+                isDraft: false,
+                status: "Submitted",
                 Items: (oData.items || []).map(function (it) {
                     return {
                         price: it.price || "0",
@@ -148,41 +155,91 @@ sap.ui.define([
                 })
             };
 
+            // use shared create routine (non-draft)
+            this._performCreate(oPayload, true);
+        }
+
+        ,
+
+        onShowOrderDetails: function (oEvent) {
+            var that = this;
+            var oSource = oEvent.getSource();
+            var oContext = oSource.getBindingContext();
+            if (!oContext) return;
+            var sPath = oContext.getPath();
+
+            if (!this._oDetailsDialog) {
+                Fragment.load({
+                    name: "project1.view.OrderDetails",
+                    controller: this
+                }).then(function (oDialog) {
+                    that._oDetailsDialog = oDialog;
+                    that.getView().addDependent(that._oDetailsDialog);
+                    // bind dialog to the selected order context
+                    that._oDetailsDialog.bindElement(sPath);
+                    that._oDetailsDialog.open();
+                });
+            } else {
+                this._oDetailsDialog.bindElement(sPath);
+                this._oDetailsDialog.open();
+            }
+        },
+
+        onCloseOrderDetails: function () {
+            if (this._oDetailsDialog) this._oDetailsDialog.close();
+        }
+        ,
+
+        onSaveDraft: function () {
+            var oData = this._oNewOrderModel.getData();
+            function pad(n) { return (n < 10 ? '0' + n : '' + n); }
+            function formatDateFlexible(value) {
+                if (!value) return null;
+                if (Object.prototype.toString.call(value) === '[object Date]') {
+                    return value.getFullYear() + '-' + pad(value.getMonth() + 1) + '-' + pad(value.getDate());
+                }
+                var s = String(value).trim();
+                var d = new Date(s);
+                if (!isNaN(d.getTime())) return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+                var m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+                if (m) {
+                    var a = parseInt(m[1], 10), b = parseInt(m[2], 10), c = parseInt(m[3], 10);
+                    var year = c < 100 ? 2000 + c : c;
+                    var day, month;
+                    if (a > 12) { day = a; month = b; } else { month = a; day = b; }
+                    var dt = new Date(year, month - 1, day);
+                    if (!isNaN(dt.getTime())) return dt.getFullYear() + '-' + pad(dt.getMonth() + 1) + '-' + pad(dt.getDate());
+                }
+                return null;
+            }
+
+            var oPayload = {
+                orderNo: oData.orderNo,
+                date: formatDateFlexible(oData.date),
+                customerName: oData.customerName,
+                isDraft: true,
+                status: "Draft",
+                Items: (oData.items || []).map(function (it) { return { price: it.price || "0", unit: it.unit || "", quantity: it.quantity || 0 }; }),
+                Attachments: (oData.attachments || []).map(function (at) { return { fileName: at.fileName, mimeType: at.mimeType }; })
+            };
+
+            this._performCreate(oPayload, true);
+        },
+
+        _performCreate: function (oPayload, bCloseDialog) {
             var oModel = this.getView().getModel();
             var that = this;
 
-            // If OData V2 model (has create), use it
-            if (oModel && typeof oModel.create === "function") {
-                oModel.create("/SalesOrders", oPayload, {
-                    success: function () {
-                        MessageToast.show("Order created");
-                        if (that._oDialog) {
-                            that._oDialog.close();
-                        }
-                        var oTable = that.byId("ordersTable");
-                        if (oTable && oTable.getBinding("items")) {
-                            oTable.getBinding("items").refresh();
-                        }
-                    },
-                    error: function (oErr) {
-                        MessageToast.show("Failed to create order");
-                    }
-                });
-
-                return;
-            }
-
-            // If OData V4 model (use binding.create)
+            // OData V4 model (use binding.create)
             if (oModel && typeof oModel.bindList === "function") {
                 try {
                     var oList = oModel.bindList("/SalesOrders");
                     var oCreateContext = oList.create(oPayload);
 
-                    // try common promise hooks on returned context
                     if (oCreateContext && typeof oCreateContext.created === "function") {
                         oCreateContext.created().then(function () {
-                            MessageToast.show("Order created");
-                            if (that._oDialog) {
+                            MessageToast.show(oPayload.isDraft ? "Draft saved" : "Order created");
+                            if (bCloseDialog && that._oDialog) {
                                 that._oDialog.close();
                             }
                             var oTable = that.byId("ordersTable");
@@ -197,8 +254,8 @@ sap.ui.define([
 
                     if (oCreateContext && typeof oCreateContext.requestCreated === "function") {
                         oCreateContext.requestCreated().then(function () {
-                            MessageToast.show("Order created");
-                            if (that._oDialog) that._oDialog.close();
+                            MessageToast.show(oPayload.isDraft ? "Draft saved" : "Order created");
+                            if (bCloseDialog && that._oDialog) that._oDialog.close();
                             var oTable = that.byId("ordersTable");
                             if (oTable && oTable.getBinding("items")) oTable.getBinding("items").refresh();
                         }).catch(function () {
@@ -207,9 +264,8 @@ sap.ui.define([
                         return;
                     }
 
-                    // Fallback: assume create was requested
-                    MessageToast.show("Order creation requested");
-                    if (that._oDialog) that._oDialog.close();
+                    MessageToast.show(oPayload.isDraft ? "Draft saved" : "Order creation requested");
+                    if (bCloseDialog && that._oDialog) that._oDialog.close();
                     var oTable = that.byId("ordersTable");
                     if (oTable && oTable.getBinding("items")) oTable.getBinding("items").refresh();
                     return;
@@ -228,8 +284,8 @@ sap.ui.define([
                     body: JSON.stringify(oPayload)
                 }).then(function (res) {
                     if (res.ok) {
-                        MessageToast.show("Order created");
-                        if (that._oDialog) that._oDialog.close();
+                        MessageToast.show(oPayload.isDraft ? "Draft saved" : "Order created");
+                        if (bCloseDialog && that._oDialog) that._oDialog.close();
                         var oTable = that.byId("ordersTable");
                         if (oTable && oTable.getBinding("items")) oTable.getBinding("items").refresh();
                     } else {

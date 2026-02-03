@@ -13,7 +13,7 @@
 
                 <Label text="Items" />
                 <VBox>
-                    <Table id="itemsTable" items="{path: 'newOrder>/items'}">
+                    <Table items="{path: 'newOrder>/items'}">
                         <headerToolbar>
                             <Toolbar>
                                 <Title text="Order Items" />
@@ -50,12 +50,12 @@
 
                 <Label text="Attachments" />
                 <VBox>
-                    <HBox>
-                        <Input id="attachFileName" placeholder="File name" />
-                        <Input id="attachMimeType" placeholder="MIME type" style="margin-left:8px;" />
-                        <Button text="Add" press="onAddAttachment" style="margin-left:8px;" />
+                    <HBox alignItems="Center" space="0.5rem">
+                        <Input placeholder="File name" />
+                        <Input placeholder="MIME type" />
+                        <Button text="Add" press="onAddAttachment" />
                     </HBox>
-                    <Table id="attachmentsTable" items="{path: 'newOrder>/attachments'}">
+                    <Table items="{path: 'newOrder>/attachments'}">
                         <columns>
                             <Column>
                                 <Text text="File Name" />
@@ -80,11 +80,13 @@
                 </VBox>
             </layout:SimpleForm>
         </content>
-        <beginButton>
-            <Button text="Create" press="onSubmitAddOrder" />
-        </beginButton>
-        <endButton>
-            <Button text="Cancel" press="onCloseAddOrder" />
-        </endButton>
+        <footer>
+            <Toolbar>
+                <ToolbarSpacer />
+                <Button text="Save" press="onSubmitAddOrder" type="Emphasized" />
+                <Button text="Save Draft" press="onSaveDraft" />
+                <Button text="Cancel" press="onCloseAddOrder" />
+            </Toolbar>
+        </footer>
     </Dialog>
 </core:FragmentDefinition>
