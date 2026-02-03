@@ -1,6 +1,39 @@
 <mvc:View controllerName="project1.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    <Page id="page" title="{i18n>title}" showHeader="false">
+        <content style="padding: 1rem;">
+            <SearchField id="searchField" width="100%" placeholder="Search orders..." search="onSearch" liveChange="onSearch" />
+
+            <Table id="ordersTable" inset="false" growing="true" items="{path: '/SalesOrders'}">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="Sales Orders" />
+                    </Toolbar>
+                </headerToolbar>
+
+                <columns>
+                    <Column>
+                        <Text text="Order No" />
+                    </Column>
+                    <Column>
+                        <Text text="Date" />
+                    </Column>
+                    <Column>
+                        <Text text="Customer" />
+                    </Column>
+                </columns>
+
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{orderNo}" />
+                            <Text text="{date}" />
+                            <Text text="{customerName}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
     </Page>
 </mvc:View>
