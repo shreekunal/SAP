@@ -1,18 +1,24 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout.form">
     <Dialog id="orderDetailsDialog" title="Order Details" stretchOnPhone="true">
         <content>
-            <layout:SimpleForm editable="false" maxContainerCols="2">
+            <layout:SimpleForm id="orderDetailsForm" maxContainerCols="2">
                 <Label text="Order No" />
                 <Text text="{orderNo}" />
 
                 <Label text="Date" />
-                <Text text="{date}" />
+                <DatePicker value="{date}" displayFormat="yyyy-MM-dd"
+                    editable="{orderDetailsModel>/isEditable}" />
 
                 <Label text="Customer" />
-                <Text text="{customerName}" />
+                <Input value="{customerName}" editable="{orderDetailsModel>/isEditable}" />
 
                 <Label text="Status" />
-                <Text text="{status}" />
+                <Select selectedKey="{status}" editable="{orderDetailsModel>/isEditable}">
+                    <items>
+                        <core:Item key="Draft" text="Draft" />
+                        <core:Item key="Submitted" text="Submitted" />
+                    </items>
+                </Select>
 
                 <Label text="Items" />
                 <Table id="detailItemsTable" items="{path: 'Items'}">
@@ -47,20 +53,32 @@
                         <Column>
                             <Text text="MIME Type" />
                         </Column>
+                        <Column>
+                            <Text text="Actions" />
+                        </Column>
                     </columns>
                     <items>
                         <ColumnListItem>
                             <cells>
                                 <Text text="{fileName}" />
                                 <Text text="{mimeType}" />
+                                <Button text="Preview" press="onPreviewAttachment" type="Emphasized" />
                             </cells>
                         </ColumnListItem>
                     </items>
                 </Table>
             </layout:SimpleForm>
         </content>
-        <endButton>
-            <Button text="Close" press="onCloseOrderDetails" />
-        </endButton>
+        <footer>
+            <Toolbar>
+                <ToolbarSpacer />
+                <Button id="editBtn" text="Edit" press="onEditOrderDetails" type="Emphasized" />
+                <Button id="saveBtn" text="Save" press="onSaveOrderDetails" type="Emphasized"
+                    visible="false" />
+                <Button id="cancelBtn" text="Cancel" press="onCancelEditOrderDetails"
+                    visible="false" />
+                <Button text="Close" press="onCloseOrderDetails" />
+            </Toolbar>
+        </footer>
     </Dialog>
 </core:FragmentDefinition>

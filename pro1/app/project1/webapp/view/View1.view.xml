@@ -7,7 +7,8 @@
             <!-- <Button id="btnAddOrder" text="Add Order" press="onOpenAddOrder" /> -->
             <!-- </HBox> -->
 
-            <Table id="ordersTable" inset="false" growing="true" items="{path: '/SalesOrders'}">
+            <Table id="ordersTable" inset="false" growing="true" items="{path: '/SalesOrders'}"
+                mode="MultiSelect">
                 <headerToolbar>
                     <Toolbar>
                         <Title text="Sales Orders" />
@@ -16,6 +17,7 @@
                             search="onSearch" liveChange="onSearch" />
                         <ToolbarSpacer />
                         <Button text="Add Order" press="onOpenAddOrder"></Button>
+                        <Button text="Delete Selected" press="onDeleteSelectedOrders" type="Reject"></Button>
                     </Toolbar>
                 </headerToolbar>
 

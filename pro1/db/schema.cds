@@ -25,13 +25,25 @@ entity SalesOrders : cuid, managed {
 entity SalesOrderItems : cuid, managed {
   parent   : Association to SalesOrders;
   price    : Decimal(10, 2);
-  unit     : String;
+  unit     : String enum {
+    pcs;
+    kg;
+    liters;
+    boxes;
+  };
   quantity : Integer;
 }
 
 entity OrderAttachments : cuid, managed {
   parent   : Association to SalesOrders;
   fileName : String;
-  mimeType : String;
+  mimeType : String enum {
+    ![application/pdf];
+    ![image/jpeg];
+    ![image/png];
+    ![text/plain];
+  };
+
+  @Core.MediaType: mimeType
   content  : LargeBinary;
 }
