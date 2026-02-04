@@ -2,13 +2,15 @@ const cds = require('@sap/cds')
 
 module.exports = class CatalogService extends cds.ApplicationService {
   init() {
-    console.log('===== CatalogService handler initialized =====');
+    debugger;
+    console.log(' CatalogService handler initialized ');
 
     const { SalesOrders, SalesOrderItems, OrderAttachments } = cds.entities('CatalogService')
 
     // Safe demo handler for CREATE only
     this.before('CREATE', SalesOrders, async (req) => {
-      console.log('============ Before CREATE SalesOrders ============')
+      debugger; 
+      console.log('Before CREATE SalesOrders')
       console.log('Request data:', JSON.stringify(req.data, null, 2))
 
       // Only set an orderNo if the client didn't provide one
@@ -19,9 +21,10 @@ module.exports = class CatalogService extends cds.ApplicationService {
     })
 
     this.before(['CREATE', 'UPDATE'], SalesOrders, async (req) => {
-      console.log('===== Before CREATE/UPDATE SalesOrders (generic) =====', req.data)
+      console.log(' Before CREATE/UPDATE SalesOrders (generic) ', req.data)
     })
     this.after('READ', SalesOrders, async (salesOrders, req) => {
+      debugger; // Break here when reading orders
       console.log('After READ SalesOrders', salesOrders)
     })
     this.before(['CREATE', 'UPDATE'], SalesOrderItems, async (req) => {
