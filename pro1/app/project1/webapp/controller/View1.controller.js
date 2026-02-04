@@ -244,37 +244,29 @@ sap.ui.define([
             }
 
             var oData = oContext.getObject();
-            var oPayload = {
-                orderNo: oData.orderNo,
-                date: formatDateFlexible(sDate),
-                customerName: sCustomer,
-                status: sStatus
-            };
+            var oModel = this.getView().getModel();
 
-            // Use direct fetch to avoid OData V4 binding issues
-            fetch("/odata/v4/catalog/SalesOrders(" + oData.ID + ")", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(oPayload)
-            }).then(function (res) {
-                if (res.ok) {
-                    MessageToast.show("Order updated");
-                    that._oDetailsModel.setProperty("/isEditable", false);
-                    that._toggleDetailButtons(false);
-                    // Refresh the table and rebind the dialog
-                    var oTable = that.byId("ordersTable");
-                    if (oTable && oTable.getBinding("items")) {
-                        oTable.getBinding("items").refresh();
-                    }
-                    // Rebind the dialog to get updated data
-                    setTimeout(function () {
-                        oContext.refresh();
-                    }, 100);
-                } else {
-                    MessageToast.show("Failed to update order");
+            // Use OData V4 binding to update the entity
+            oContext.setProperty("date", formatDateFlexible(sDate));
+            oContext.setProperty("customerName", sCustomer);
+            oContext.setProperty("status", sStatus);
+
+            // Submit the changes using OData V4 binding
+            oModel.submitBatch("update").then(function () {
+                MessageToast.show("Order updated");
+                that._oDetailsModel.setProperty("/isEditable", false);
+                that._toggleDetailButtons(false);
+                // Refresh the table and rebind the dialog
+                var oTable = that.byId("ordersTable");
+                if (oTable && oTable.getBinding("items")) {
+                    oTable.getBinding("items").refresh();
                 }
-            }).catch(function () {
-                MessageToast.show("Failed to update order");
+                // Rebind the dialog to get updated data
+                setTimeout(function () {
+                    oContext.refresh();
+                }, 100);
+            }).catch(function (oError) {
+                MessageToast.show("Failed to update order: " + (oError.message || "Unknown error"));
             });
         },
 
@@ -461,33 +453,11 @@ sap.ui.define([
                     if (oTable && oTable.getBinding("items")) oTable.getBinding("items").refresh();
                     return;
                 } catch (e) {
-                    console.error(e);
-                    MessageToast.show("Failed to create order");
-                    return;
+                    console.error("OData V4 binding create failed:", e);
+                    MessageToast.show("Failed to create order: " + (e.message || "Unknown error"));
                 }
-            }
-
-            // Last-resort: POST directly to OData endpoint
-            try {
-                fetch("/odata/v4/catalog/SalesOrders", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(oPayload)
-                }).then(function (res) {
-                    if (res.ok) {
-                        MessageToast.show(oPayload.isDraft ? "Draft saved" : "Order created");
-                        if (bCloseDialog && that._oDialog) that._oDialog.close();
-                        var oTable = that.byId("ordersTable");
-                        if (oTable && oTable.getBinding("items")) oTable.getBinding("items").refresh();
-                    } else {
-                        MessageToast.show("Failed to create order");
-                    }
-                }).catch(function () {
-                    MessageToast.show("Failed to create order");
-                });
-            } catch (e) {
-                console.error(e);
-                MessageToast.show("Failed to create order");
+            } else {
+                MessageToast.show("OData V4 model not available");
             }
         }
     });
