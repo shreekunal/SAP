@@ -1,0 +1,9 @@
+CREATE PROCEDURE TotalOrder(
+    IN empId INT,
+    IN newSalary INT
+)
+BEGIN
+    UPDATE employee
+    SET salary = newSalary
+    WHERE id = empId;
+END;
