@@ -1,24 +1,13 @@
 PROCEDURE "GET_TOTAL_ORDER"(
     IN p_orderId NVARCHAR(36),
-    OUT p_totalAmount DECIMAL(15, 2),
-    OUT p_itemCount INTEGER,
-    OUT p_orderStatus NVARCHAR(20)
+    OUT p_totalAmount DECIMAL(15, 2)
 )
 LANGUAGE SQLSCRIPT
 READS SQL DATA
 AS
 BEGIN
-    -- Simple procedure to calculate order totals
-    SELECT
-        COALESCE(SUM("PRICE" * "QUANTITY"), 0.00) AS total,
-        COUNT(*) AS cnt,
-        (SELECT "STATUS" FROM "MY_ORDERSHOP_SALESORDERS" WHERE "ID" = p_orderId) AS status
-    INTO p_totalAmount, p_itemCount, p_orderStatus
+    SELECT COALESCE(SUM("PRICE" * "QUANTITY"), 0.00)
+    INTO p_totalAmount
     FROM "MY_ORDERSHOP_SALESORDERITEMS"
     WHERE "PARENT_ID" = p_orderId;
-
-    -- Default status if order not found
-    IF p_orderStatus IS NULL THEN
-        p_orderStatus = 'NOT_FOUND';
-    END IF;
 END;
