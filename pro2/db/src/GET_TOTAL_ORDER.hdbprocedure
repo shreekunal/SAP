@@ -8,25 +8,17 @@ LANGUAGE SQLSCRIPT
 READS SQL DATA
 AS
 BEGIN
-    DECLARE v_total DECIMAL(15, 2) := 0.00;
-    DECLARE v_count INTEGER := 0;
-    DECLARE v_status NVARCHAR(20) := 'NOT_FOUND';
-
-    -- Get order status
-    SELECT "status" INTO v_status
-    FROM "MY_ORDERSHOP_SALESORDERS"
-    WHERE "ID" = p_orderId;
-
-    -- Calculate total amount and item count
+    -- Simple procedure to calculate order totals
     SELECT
-        COALESCE(SUM("price" * "quantity"), 0.00),
-        COUNT(*)
-    INTO v_total, v_count
+        COALESCE(SUM("price" * "quantity"), 0.00) AS total,
+        COUNT(*) AS cnt,
+        (SELECT "status" FROM "MY_ORDERSHOP_SALESORDERS" WHERE "ID" = p_orderId) AS status
+    INTO p_totalAmount, p_itemCount, p_orderStatus
     FROM "MY_ORDERSHOP_SALESORDERITEMS"
     WHERE "parent_ID" = p_orderId;
 
-    -- Return output parameters
-    p_totalAmount := v_total;
-    p_itemCount := v_count;
-    p_orderStatus := v_status;
+    -- Default status if order not found
+    IF p_orderStatus IS NULL THEN
+        p_orderStatus = 'NOT_FOUND';
+    END IF;
 END;
