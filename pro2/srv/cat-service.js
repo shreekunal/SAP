@@ -10,7 +10,7 @@ module.exports = class CatalogService extends cds.ApplicationService {
     this.before('CREATE', SalesOrders, async (req) => {
       console.log('Before CREATE SalesOrders')
       console.log('Request data:', JSON.stringify(req.data, null, 2))
-      
+
       // Only set an orderNo if the client didn't provide one
       if (!req.data.orderNo) {
         req.data.orderNo = 'AUTO-' + Date.now()
@@ -154,6 +154,27 @@ module.exports = class CatalogService extends cds.ApplicationService {
     })
     this.after('READ', OrderAttachments, async (orderAttachments, req) => {
       console.log('After READ OrderAttachments', orderAttachments)
+    })
+
+    // Implement the GetOrderTotal function to call stored procedure
+    this.on('function', 'GetOrderTotal', async (req) => {
+      const { orderId } = req.data
+
+      try {
+        // Call the stored procedure using raw SQL
+        const result = await cds.run(
+          cds.sql`CALL "GET_TOTAL_ORDER"(${orderId}, ?, ?, ?)`
+        )
+
+        return {
+          totalAmount: result[0],
+          itemCount: result[1],
+          orderStatus: result[2]
+        }
+      } catch (err) {
+        console.error('Error calling GetOrderTotal procedure:', err)
+        throw err
+      }
     })
 
     return super.init()

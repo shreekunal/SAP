@@ -1,9 +1,25 @@
-CREATE PROCEDURE TotalOrder(
-    IN empId INT,
-    IN newSalary INT
+-- Stored Procedure to calculate order totals
+-- Called via OData: GET /api/catalog/GetOrderTotals(ID='...')
+CREATE PROCEDURE "GET_TOTAL_ORDER"(
+    IN "orderId" NVARCHAR(36),
+    OUT "totalAmount" DECIMAL(15, 2),
+    OUT "itemCount" INTEGER,
+    OUT "orderStatus" NVARCHAR(20)
 )
+LANGUAGE SQLSCRIPT
+READONLY
 BEGIN
-    UPDATE employee
-    SET salary = newSalary
-    WHERE id = empId;
+    -- Calculate total amount and item count from order items
+    SELECT
+        COALESCE(SUM("price" * "quantity"), 0.00),
+        COUNT(*),
+        (SELECT "status" FROM "MY_ORDERSHOP_SALESORDERS" WHERE "ID" = "orderId")
+    INTO "totalAmount", "itemCount", "orderStatus"
+    FROM "MY_ORDERSHOP_SALESORDERITEMS"
+    WHERE "PARENT_ID" = "orderId";
+
+    -- Handle null status (order not found)
+    IF "orderStatus" IS NULL THEN
+        "orderStatus" := 'NOT_FOUND';
+    END IF;
 END;

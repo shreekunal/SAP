@@ -35,4 +35,13 @@ service CatalogService {
             so.orderNo,
             so.customerName,
             so.date;
+
+    // Expose the stored procedure function
+    type OrderTotalResult {
+        totalAmount : Decimal(15, 2);
+        itemCount   : Integer;
+        orderStatus : String;
+    }
+
+    function GetOrderTotal(orderId: String) returns OrderTotalResult;
 }
