@@ -10,12 +10,12 @@ AS
 BEGIN
     -- Simple procedure to calculate order totals
     SELECT
-        COALESCE(SUM("price" * "quantity"), 0.00) AS total,
+        COALESCE(SUM("PRICE" * "QUANTITY"), 0.00) AS total,
         COUNT(*) AS cnt,
-        (SELECT "status" FROM "MY_ORDERSHOP_SALESORDERS" WHERE "ID" = p_orderId) AS status
+        (SELECT "STATUS" FROM "MY_ORDERSHOP_SALESORDERS" WHERE "ID" = p_orderId) AS status
     INTO p_totalAmount, p_itemCount, p_orderStatus
     FROM "MY_ORDERSHOP_SALESORDERITEMS"
-    WHERE "parent_ID" = p_orderId;
+    WHERE "PARENT_ID" = p_orderId;
 
     -- Default status if order not found
     IF p_orderStatus IS NULL THEN
