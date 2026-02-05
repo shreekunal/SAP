@@ -1,25 +1,35 @@
--- Stored Procedure to calculate order totals
--- Called via OData: GET /api/catalog/GetOrderTotals(ID='...')
-CREATE PROCEDURE "GET_TOTAL_ORDER"(
+-- Stored Procedure: GET_TOTAL_ORDER
+-- Purpose: Calculate total order amount from line items
+-- Input: orderId (NVARCHAR(36)) - UUID of the sales order
+-- Output: totalAmount, itemCount, orderStatus
+PROCEDURE "GET_TOTAL_ORDER"(
     IN "orderId" NVARCHAR(36),
     OUT "totalAmount" DECIMAL(15, 2),
     OUT "itemCount" INTEGER,
     OUT "orderStatus" NVARCHAR(20)
 )
 LANGUAGE SQLSCRIPT
-READONLY
+READS SQL DATA
 BEGIN
-    -- Calculate total amount and item count from order items
+    DECLARE v_total DECIMAL(15, 2) := 0.00;
+    DECLARE v_count INTEGER := 0;
+    DECLARE v_status NVARCHAR(20) := 'NOT_FOUND';
+
+    -- Get order status
+    SELECT "status" INTO v_status
+    FROM "MY_ORDERSHOP_SALESORDERS"
+    WHERE "ID" = "orderId";
+
+    -- Calculate total amount and item count
     SELECT
         COALESCE(SUM("price" * "quantity"), 0.00),
-        COUNT(*),
-        (SELECT "status" FROM "MY_ORDERSHOP_SALESORDERS" WHERE "ID" = "orderId")
-    INTO "totalAmount", "itemCount", "orderStatus"
+        COUNT(*)
+    INTO v_total, v_count
     FROM "MY_ORDERSHOP_SALESORDERITEMS"
-    WHERE "PARENT_ID" = "orderId";
+    WHERE "parent_ID" = "orderId";
 
-    -- Handle null status (order not found)
-    IF "orderStatus" IS NULL THEN
-        "orderStatus" := 'NOT_FOUND';
-    END IF;
+    -- Set output parameters
+    "totalAmount" := v_total;
+    "itemCount" := v_count;
+    "orderStatus" := v_status;
 END;

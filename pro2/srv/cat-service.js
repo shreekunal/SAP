@@ -156,24 +156,72 @@ module.exports = class CatalogService extends cds.ApplicationService {
       console.log('After READ OrderAttachments', orderAttachments)
     })
 
-    // Implement the GetOrderTotal function to call stored procedure
+    // Implement the GetOrderTotal function - calls native HANA stored procedure
     this.on('function', 'GetOrderTotal', async (req) => {
       const { orderId } = req.data
+      const db = cds.db
 
       try {
-        // Call the stored procedure using raw SQL
-        const result = await cds.run(
-          cds.sql`CALL "GET_TOTAL_ORDER"(${orderId}, ?, ?, ?)`
+        console.log(`Executing GET_TOTAL_ORDER for orderId: ${orderId}`)
+
+        // Call the HANA stored procedure
+        const result = await db.run(
+          cds.sql`CALL "GET_TOTAL_ORDER" (${orderId}, ?, ?, ?)`
         )
 
+        // Parse results - stored procedure returns values in order
+        const totalAmount = result[0] || 0.00
+        const itemCount = result[1] || 0
+        const orderStatus = result[2] || 'NOT_FOUND'
+
+        console.log(`Result: totalAmount=${totalAmount}, itemCount=${itemCount}, status=${orderStatus}`)
+
         return {
-          totalAmount: result[0],
-          itemCount: result[1],
-          orderStatus: result[2]
+          totalAmount: parseFloat(totalAmount),
+          itemCount: parseInt(itemCount),
+          orderStatus: orderStatus
         }
       } catch (err) {
-        console.error('Error calling GetOrderTotal procedure:', err)
-        throw err
+        console.error('Error calling stored procedure GET_TOTAL_ORDER:', err)
+
+        // Fallback: calculate using CDS queries if procedure fails
+        console.log('Falling back to CDS query method...')
+
+        try {
+          const order = await cds.run(
+            SELECT.one.from('my.orderShop.SalesOrders').where({ ID: orderId })
+          )
+
+          if (!order) {
+            return {
+              totalAmount: 0.00,
+              itemCount: 0,
+              orderStatus: 'NOT_FOUND'
+            }
+          }
+
+          const items = await cds.run(
+            SELECT.from('my.orderShop.SalesOrderItems').where({ parent_ID: orderId })
+          )
+
+          let totalAmount = 0.00
+          let itemCount = items ? items.length : 0
+
+          if (items && items.length > 0) {
+            totalAmount = items.reduce((sum, item) => {
+              return sum + (parseFloat(item.price || 0) * parseInt(item.quantity || 0))
+            }, 0)
+          }
+
+          return {
+            totalAmount: parseFloat(totalAmount.toFixed(2)),
+            itemCount: itemCount,
+            orderStatus: order.status || 'UNKNOWN'
+          }
+        } catch (fallbackErr) {
+          console.error('Fallback also failed:', fallbackErr)
+          throw fallbackErr
+        }
       }
     })
 
