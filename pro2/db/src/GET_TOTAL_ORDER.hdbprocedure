@@ -1,35 +1,32 @@
--- Stored Procedure: GET_TOTAL_ORDER
--- Purpose: Calculate total order amount from line items
--- Input: orderId (NVARCHAR(36)) - UUID of the sales order
--- Output: totalAmount, itemCount, orderStatus
-PROCEDURE "GET_TOTAL_ORDER"
+PROCEDURE "GET_TOTAL_ORDER"(
+    IN p_orderId NVARCHAR(36),
+    OUT p_totalAmount DECIMAL(15, 2),
+    OUT p_itemCount INTEGER,
+    OUT p_orderStatus NVARCHAR(20)
+)
 LANGUAGE SQLSCRIPT
 READS SQL DATA
 AS
 BEGIN
-    -- Input parameter
-    DECLARE orderId NVARCHAR(36) := :orderId;
-    
-    -- Output parameters
-    DECLARE totalAmount DECIMAL(15, 2) := 0.00;
-    DECLARE itemCount INTEGER := 0;
-    DECLARE orderStatus NVARCHAR(20) := 'NOT_FOUND';
+    DECLARE v_total DECIMAL(15, 2) := 0.00;
+    DECLARE v_count INTEGER := 0;
+    DECLARE v_status NVARCHAR(20) := 'NOT_FOUND';
 
     -- Get order status
-    SELECT "status" INTO orderStatus
+    SELECT "status" INTO v_status
     FROM "MY_ORDERSHOP_SALESORDERS"
-    WHERE "ID" = orderId;
+    WHERE "ID" = p_orderId;
 
     -- Calculate total amount and item count
     SELECT
         COALESCE(SUM("price" * "quantity"), 0.00),
         COUNT(*)
-    INTO totalAmount, itemCount
+    INTO v_total, v_count
     FROM "MY_ORDERSHOP_SALESORDERITEMS"
-    WHERE "parent_ID" = orderId;
+    WHERE "parent_ID" = p_orderId;
 
-    -- Set output parameters
-    :totalAmount := totalAmount;
-    :itemCount := itemCount;
-    :orderStatus := orderStatus;
+    -- Return output parameters
+    p_totalAmount := v_total;
+    p_itemCount := v_count;
+    p_orderStatus := v_status;
 END;
