@@ -1,7 +1,7 @@
 using my.orderShop as my from '../db/schema';
 
 service CatalogService {
-    @cds.redirection.target
+    // @cds.redirection.target
     entity SalesOrders      as projection on my.SalesOrders;
     entity SalesOrderItems  as projection on my.SalesOrderItems;
     entity OrderAttachments as projection on my.OrderAttachments;
