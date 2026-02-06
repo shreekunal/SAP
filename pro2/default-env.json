@@ -1,0 +1,19 @@
+{
+  "VCAP_SERVICES": {
+    "hana": [
+      {
+        "name": "pro2-db",
+        "label": "hana",
+        "plan": "hdi-shared",
+        "credentials": {
+          "host": "YOUR_HOST_FROM_CF_ENV",
+          "port": "443",
+          "schema": "YOUR_SCHEMA_FROM_CF_ENV",
+          "user": "YOUR_USER_FROM_CF_ENV",
+          "password": "<<<COPY PASSWORD FROM cf env>>>",
+          "certificate": "<<<COPY FULL CERTIFICATE BLOCK FROM cf env>>>"
+        }
+      }
+    ]
+  }
+}

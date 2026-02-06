@@ -18,6 +18,19 @@
   "private": true,
   "cds": {
     "requires": {
+      "db": {
+        "kind": "sqlite"
+      },
+      "[hana]": {
+        "db": {
+          "kind": "hana"
+        }
+      },
+      "[hybrid]": {
+        "db": {
+          "kind": "hana"
+        }
+      },
       "[production]": {
         "auth": "xsuaa"
       }
