@@ -7,7 +7,7 @@ using {
 
 /**
  * SalesOrders entity
- * @note orderNo is auto-generated using the "demo" HDB sequence (GENERATE_ORDER_NUMBER procedure)
+ * @note orderNo is auto-generated using the "demo" HDB sequence
  * Format: ORD-00001, ORD-00002, etc.
  */
 entity SalesOrders : cuid, managed {

@@ -14,30 +14,17 @@ module.exports = class CatalogService extends cds.ApplicationService {
       // Only set an orderNo if the client didn't provide one
       if (!req.data.orderNo) {
         try {
-          // Call stored procedure to generate order number from sequence
+          // Get next value from HDB sequence
           const db = cds.db
           const result = await db.run(
-            cds.ql.expr`CALL "GENERATE_ORDER_NUMBER" ( orderNumber => ? )`,
-            []
+            cds.ql.expr`SELECT NEXT VALUE FOR "DEMO" as seq_value FROM DUMMY`
           )
-          // If result exists, use it; otherwise use fallback
-          req.data.orderNo = result?.[0]?.orderNumber || 'ORD-' + Date.now()
-          console.log('Generated orderNo from sequence procedure:', req.data.orderNo)
+          const sequenceValue = result[0]?.seq_value || 1
+          req.data.orderNo = 'ORD-' + String(sequenceValue).padStart(5, '0')
+          console.log('Generated orderNo from sequence:', req.data.orderNo)
         } catch (error) {
-          console.error('Error calling GENERATE_ORDER_NUMBER procedure:', error)
-          // Fallback: use direct sequence query
-          try {
-            const db = cds.db
-            const seqResult = await db.run(
-              cds.ql.expr`SELECT NEXT VALUE FOR "DEMO" as seq_value FROM DUMMY`
-            )
-            const sequenceValue = seqResult[0]?.seq_value || 1
-            req.data.orderNo = 'ORD-' + String(sequenceValue).padStart(5, '0')
-            console.log('Generated orderNo from sequence (fallback):', req.data.orderNo)
-          } catch (fallbackError) {
-            console.error('Fallback error:', fallbackError)
-            req.data.orderNo = 'ORD-' + Date.now()
-          }
+          console.error('Error getting sequence value:', error)
+          req.data.orderNo = 'ORD-' + Date.now()
         }
       }
       debugger; // Break here when creating a sales order
