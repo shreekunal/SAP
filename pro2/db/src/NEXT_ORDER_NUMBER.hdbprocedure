@@ -3,15 +3,14 @@ PROCEDURE "NEXT_ORDER_NUMBER" (
 )
 LANGUAGE SQLSCRIPT
 SQL SECURITY INVOKER
+READS SQL DATA
 AS
 BEGIN
    DECLARE seq_value INT;
-   DECLARE formatted_number NVARCHAR(5);
    
    -- Get next value from demo sequence
-   SELECT "demo".NEXTVAL INTO seq_value FROM SYS.DUMMY;
+   SELECT "demo".NEXTVAL INTO seq_value;
    
    -- Format as ORD-00001, ORD-00002, etc.
-   formatted_number := LPAD(CAST(seq_value AS NVARCHAR(5)), 5, '0');
-   ORDER_NUMBER := 'ORD-' || formatted_number;
+   ORDER_NUMBER := 'ORD-' || LPAD(CAST(seq_value AS NVARCHAR(5)), 5, '0');
 END

@@ -1,10 +1,21 @@
 const cds = require('@sap/cds')
+const SequenceHelper = require('./lib/SequenceHelper')
 
 module.exports = class CatalogService extends cds.ApplicationService {
   init() {
     console.log(' CatalogService handler initialized ');
 
     const { SalesOrders, SalesOrderItems, OrderAttachments } = cds.entities('CatalogService')
+
+    // Initialize Sequence Helper for orderNo generation
+    const orderSequence = new SequenceHelper({
+      db: cds.db,
+      sequence: 'demo',
+      table: 'MY_ORDERSHOP_SALESORDERS',
+      field: 'orderNo',
+      prefix: 'ORD-',
+      format: '5'
+    })
 
     // Safe demo handler for CREATE only
     this.before('CREATE', SalesOrders, async (req) => {
@@ -14,13 +25,10 @@ module.exports = class CatalogService extends cds.ApplicationService {
       // Only set an orderNo if the client didn't provide one
       if (!req.data.orderNo) {
         try {
-          // Call stored procedure that uses the HANA sequence
-          const db = cds.db
-          const result = await db.run(`CALL "NEXT_ORDER_NUMBER" (?)`, [])
-          req.data.orderNo = result[0]?.ORDER_NUMBER || 'ORD-999999'
-          console.log('Generated orderNo from sequence via procedure:', req.data.orderNo)
+          req.data.orderNo = await orderSequence.getNextNumber()
+          console.log('Generated orderNo from sequence:', req.data.orderNo)
         } catch (error) {
-          console.error('Error getting order number from sequence:', error)
+          console.error('Error getting order number:', error)
           req.data.orderNo = 'ORD-ERR-' + Date.now()
         }
       }
