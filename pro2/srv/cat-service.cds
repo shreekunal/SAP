@@ -5,6 +5,7 @@ service CatalogService {
     entity SalesOrderItems  as projection on my.SalesOrderItems;
     entity OrderAttachments as projection on my.OrderAttachments;
     function getAllOrderTotals() returns array of OrderTotal;
+    function verifySequence() returns Integer;
 }
 
 type OrderTotal {

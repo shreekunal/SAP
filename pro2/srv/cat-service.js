@@ -1,5 +1,5 @@
 const cds = require('@sap/cds')
-const SequenceHelper = require('./lib/SequenceHelper')
+const SequenceHelper = require('./sequence-helper')
 
 module.exports = class CatalogService extends cds.ApplicationService {
   init() {
@@ -7,33 +7,26 @@ module.exports = class CatalogService extends cds.ApplicationService {
 
     const { SalesOrders, SalesOrderItems, OrderAttachments } = cds.entities('CatalogService')
 
-    // Initialize Sequence Helper for orderNo generation
-    const orderSequence = new SequenceHelper({
-      db: cds.db,
-      sequence: 'demo',
-      table: 'MY_ORDERSHOP_SALESORDERS',
-      field: 'orderNo',
-      prefix: 'ORD-',
-      format: '5'
-    })
-
     // Safe demo handler for CREATE only
     this.before('CREATE', SalesOrders, async (req) => {
-      console.log('Before CREATE SalesOrders')
-      console.log('Request data:', JSON.stringify(req.data, null, 2))
 
-      // Only set an orderNo if the client didn't provide one
+      const db = await cds.connect.to('db');
+
+      // 1. Get next sequence value
+      const [{ NEXTVAL }] = await db.run(`
+      SELECT ORDER_ID_SEQUENCE.NEXTVAL AS NEXTVAL FROM DUMMY
+      `);
+
+      // 2. Assign it
+      req.data.ID = NEXTVAL;
+
+      // Optional: generate a human-readable order number
       if (!req.data.orderNo) {
-        try {
-          req.data.orderNo = await orderSequence.getNextNumber()
-          console.log('Generated orderNo from sequence:', req.data.orderNo)
-        } catch (error) {
-          console.error('Error getting order number:', error)
-          req.data.orderNo = 'ORD-ERR-' + Date.now()
-        }
+        req.data.orderNo = `SO-${NEXTVAL}`;
       }
-      debugger; // Break here when creating a sales order
-    })
+
+    });
+
 
     this.before(['CREATE', 'UPDATE'], SalesOrders, async (req) => {
       console.log(' Before CREATE/UPDATE SalesOrders (generic) ', req.data)
@@ -182,6 +175,20 @@ module.exports = class CatalogService extends cds.ApplicationService {
       // CAP expects plain array → procedure already returns that
       return result;
     });
+
+    this.on('verifySequence', async () => {
+      const db = await cds.connect.to('db');
+
+      const nextSequence = new SequenceHelper({
+        db,
+        sequence: "ORDER_ID_SEQUENCE"
+      });
+
+      const ID = await nextSequence.getNextNumber();
+      return ID;
+    });
+
+
 
     return super.init()
   }
