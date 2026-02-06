@@ -1,15 +1,17 @@
-PROCEDURE "NEXT_ORDER_NUMBER" (
+CREATE PROCEDURE "NEXT_ORDER_NUMBER" (
    OUT ORDER_NUMBER NVARCHAR(10)
 )
 LANGUAGE SQLSCRIPT
 SQL SECURITY INVOKER
 AS
 BEGIN
-   DECLARE seq_value INT;
-   
-   -- Get next value from demo sequence using NEXT VALUE FOR
-   SELECT NEXT VALUE FOR "demo" INTO seq_value FROM DUMMY;
-   
+   DECLARE seq_value BIGINT;
+
+   -- Get next value from HANA sequence
+   SELECT NEXT VALUE FOR "DEMO"
+     INTO seq_value
+     FROM DUMMY;
+
    -- Format as ORD-00001, ORD-00002, etc.
-   ORDER_NUMBER := 'ORD-' || LPAD(CAST(seq_value AS NVARCHAR(5)), 5, '0');
-END
+   ORDER_NUMBER := 'ORD-' || LPAD(TO_NVARCHAR(seq_value), 5, '0');
+END;
