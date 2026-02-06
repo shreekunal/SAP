@@ -14,17 +14,14 @@ module.exports = class CatalogService extends cds.ApplicationService {
       // Only set an orderNo if the client didn't provide one
       if (!req.data.orderNo) {
         try {
-          // Get next value from HDB sequence
+          // Call stored procedure that uses the HANA sequence
           const db = cds.db
-          const result = await db.run(
-            cds.ql.expr`SELECT NEXT VALUE FOR "DEMO" as seq_value FROM DUMMY`
-          )
-          const sequenceValue = result[0]?.seq_value || 1
-          req.data.orderNo = 'ORD-' + String(sequenceValue).padStart(5, '0')
-          console.log('Generated orderNo from sequence:', req.data.orderNo)
+          const result = await db.run(`CALL "NEXT_ORDER_NUMBER" (?)`, [])
+          req.data.orderNo = result[0]?.ORDER_NUMBER || 'ORD-999999'
+          console.log('Generated orderNo from sequence via procedure:', req.data.orderNo)
         } catch (error) {
-          console.error('Error getting sequence value:', error)
-          req.data.orderNo = 'ORD-' + Date.now()
+          console.error('Error getting order number from sequence:', error)
+          req.data.orderNo = 'ORD-ERR-' + Date.now()
         }
       }
       debugger; // Break here when creating a sales order

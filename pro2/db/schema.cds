@@ -7,8 +7,10 @@ using {
 
 /**
  * SalesOrders entity
- * @note orderNo is auto-generated using the "demo" HDB sequence
+ * @note orderNo is auto-generated using the "demo" HDB sequence via NEXT_ORDER_NUMBER procedure
  * Format: ORD-00001, ORD-00002, etc.
+ * Sequence: demo.hdbsequence
+ * Procedure: NEXT_ORDER_NUMBER.hdbprocedure
  */
 entity SalesOrders : cuid, managed {
   orderNo      : String;
