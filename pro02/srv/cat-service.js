@@ -155,6 +155,17 @@ module.exports = class CatalogService extends cds.ApplicationService {
     this.after('READ', OrderAttachments, async (orderAttachments, req) => {
       console.log('After READ OrderAttachments', orderAttachments)
     })
+    this.on('getAllOrderTotals', async () => {
+
+      const db = await cds.connect.to('db');
+
+      const result = await db.run(`
+      CALL GET_ALL_ORDER_TOTALS(?)
+    `);
+
+      // CAP expects plain array → procedure already returns that
+      return result;
+    });
 
     return super.init()
   }

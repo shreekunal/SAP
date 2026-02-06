@@ -1,0 +1,15 @@
+{
+  "build": {
+    "target": "gen",
+    "tasks": [
+      {
+        "for": "hana",
+        "src": "db"
+      },
+      {
+        "for": "nodejs",
+        "src": "srv"
+      }
+    ]
+  }
+}

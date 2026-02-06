@@ -1,0 +1,4 @@
+ID,parent_ID,fileName,mimeType,createdAt,createdBy,modifiedAt,modifiedBy
+ddddddd4-dddd-dddd-dddd-dddddddddddd,33333333-3333-3333-3333-333333333333,invoice_SO-1003.pdf,application/pdf,2026-02-01T09:20:00Z,admin,2026-02-01T09:20:00Z,admin
+hhhhhhh7-hhhh-hhhh-hhhh-hhhhhhhhhhhh,44444444-4444-4444-4444-444444444444,contract_SO-1004.pdf,application/pdf,2026-02-05T09:00:00Z,admin,2026-02-05T09:00:00Z,admin
+iiiiiii8-iiii-iiii-iiii-iiiiiiiiiiii,55555555-5555-5555-5555-555555555555,deliverynote_SO-1005.pdf,application/pdf,2026-02-10T14:40:00Z,admin,2026-02-10T14:40:00Z,admin

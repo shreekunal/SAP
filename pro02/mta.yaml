@@ -24,8 +24,8 @@ modules:
         properties:
           srv-url: ${default-url}
     requires:
-      - name: pro2-db
       - name: pro2-auth
+      - name: pro2-db
 
   - name: pro2-db-deployer
     type: hdb
@@ -36,11 +36,6 @@ modules:
       - name: pro2-db
 
 resources:
-  - name: pro2-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
   - name: pro2-auth
     type: org.cloudfoundry.managed-service
     parameters:
@@ -54,3 +49,8 @@ resources:
           credential-types:
             - "binding-secret"
             - "x509"
+  - name: pro2-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
