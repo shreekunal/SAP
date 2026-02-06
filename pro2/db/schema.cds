@@ -5,6 +5,11 @@ using {
   managed
 } from '@sap/cds/common';
 
+/**
+ * SalesOrders entity
+ * @note orderNo is auto-generated using the "demo" HDB sequence (GENERATE_ORDER_NUMBER procedure)
+ * Format: ORD-00001, ORD-00002, etc.
+ */
 entity SalesOrders : cuid, managed {
   orderNo      : String;
   date         : Date;
