@@ -5,9 +5,13 @@ LANGUAGE SQLSCRIPT
 SQL SECURITY INVOKER
 AS
 BEGIN
-   DECLARE seq_value INTEGER;
+   DECLARE seq_value INT;
+   DECLARE formatted_number NVARCHAR(5);
    
-   SELECT NEXT VALUE FOR "demo" INTO seq_value FROM DUMMY;
+   -- Get next value from demo sequence
+   SELECT "demo".NEXTVAL INTO seq_value FROM SYS.DUMMY;
    
-   ORDER_NUMBER := 'ORD-' || LPAD(CAST(seq_value AS NVARCHAR(5)), 5, '0');
+   -- Format as ORD-00001, ORD-00002, etc.
+   formatted_number := LPAD(CAST(seq_value AS NVARCHAR(5)), 5, '0');
+   ORDER_NUMBER := 'ORD-' || formatted_number;
 END
