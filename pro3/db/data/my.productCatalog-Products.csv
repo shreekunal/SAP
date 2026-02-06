@@ -1,0 +1,11 @@
+ID,productCode,name,description,price,currency,unit,stockQuantity,isActive,category_ID,createdAt,createdBy,modifiedAt,modifiedBy
+101,ELEC001,Wireless Mouse,High precision wireless mouse,25.99,USD,pcs,150,true,1,2025-01-01,admin,2025-01-01,admin
+102,ELEC002,USB-C Cable,Fast charging USB-C cable,12.49,USD,pcs,300,true,1,2025-01-01,admin,2025-01-01,admin
+103,FURN001,Office Chair,Ergonomic office chair,199.99,USD,pcs,45,true,2,2025-01-02,admin,2025-01-02,admin
+104,CLOTH001,Cotton T-Shirt,Comfortable cotton t-shirt,19.99,USD,pcs,200,true,3,2025-01-03,admin,2025-01-03,admin
+105,BOOK001,Programming Guide,Complete programming guide,39.99,USD,pcs,75,true,4,2025-01-04,admin,2025-01-04,admin
+106,SPORT001,Yoga Mat,Non-slip yoga mat,24.99,USD,pcs,120,true,5,2025-01-05,admin,2025-01-05,admin
+107,FOOD001,Organic Coffee,Premium organic coffee beans,15.99,USD,kg,200,true,6,2025-01-06,admin,2025-01-06,admin
+108,BEAUTY001,Face Cream,Moisturizing face cream,34.99,USD,pcs,90,true,7,2025-01-07,admin,2025-01-07,admin
+109,TOYS001,Board Game,Family board game,29.99,USD,boxes,60,true,8,2025-01-08,admin,2025-01-08,admin
+110,AUTO001,Car Air Filter,Replacement air filter,18.99,USD,pcs,180,true,10,2025-01-10,admin,2025-01-10,admin
