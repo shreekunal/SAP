@@ -19,13 +19,21 @@
   "private": true,
   "cds": {
     "requires": {
+      "kinds": {
+        "destination": {
+          "impl": "@sap/cds/srv/remote-service.js"
+        }
+      },
+      "destination": {
+        "kind": "destination"
+      },
       "OrdersServiceRemote": {
-        "kind": "odata",
+        "kind": "destination",
         "credentials": { "destination": "devpro4" },
         "path": "/odata/v4/orders"
       },
       "EmployeesServiceRemote": {
-        "kind": "odata",
+        "kind": "destination",
         "credentials": { "destination": "devpro5" },
         "path": "/odata/v4/employees"
       }
@@ -33,14 +41,14 @@
     "[development]": {
       "requires": {
         "OrdersServiceRemote": {
+          "kind": "odata",
           "credentials": {
-            "destination": null,
             "url": "http://localhost:4004/odata/v4/orders"
           }
         },
         "EmployeesServiceRemote": {
+          "kind": "odata",
           "credentials": {
-            "destination": null,
             "url": "http://localhost:4005/odata/v4/employees"
           }
         }
