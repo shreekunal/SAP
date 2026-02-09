@@ -5,6 +5,11 @@ using {
   managed
 } from '@sap/cds/common';
 
+
+entity test : cuid {
+  name : String;
+}
+
 entity SalesOrders : cuid, managed {
   orderNo      : String;
   date         : Date;

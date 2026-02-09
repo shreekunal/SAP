@@ -1,0 +1,14 @@
+{
+    "logical-global-grantor": {
+        "object_owner": {
+            "container_roles": [
+                "my.orderShop::global_access_g#"
+            ]
+        },
+        "application_user": {
+            "container_roles": [
+                "my.orderShop::global_access"
+            ]
+        }
+    }
+}

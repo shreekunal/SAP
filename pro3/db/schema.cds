@@ -47,3 +47,8 @@ entity OrderProductLinks : cuid, managed {
   quantity    : Integer;
   unitPrice   : Decimal(10, 2);
 }
+
+@cds.persistence.exists
+entity test2 : cuid {
+  name : String;
+}

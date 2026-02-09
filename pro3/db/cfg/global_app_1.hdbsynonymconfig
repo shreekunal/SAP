@@ -1,0 +1,8 @@
+{
+    "CONSUMER_SYN_JOBHIMANNHAI_ITEMS": {
+        "target": {
+            "object": "MY_ORDERSHOP_TEST",
+            "schema.configure": "logical-global-grantor/schema"
+        }
+    }
+}

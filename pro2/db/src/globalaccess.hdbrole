@@ -4,7 +4,7 @@
         "name": "my.orderShop::global_access",
         "object_privileges": [
             {
-                "name": "MY_ORDERSHOP_SALESORDERS",
+                "name": "MY_ORDERSHOP_TEST",
                 "type": "TABLE",
                 "privileges": [
                     "SELECT"

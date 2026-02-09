@@ -11,6 +11,20 @@ build-parameters:
         - npm ci
         - npx cds build --production
 modules:
+  - name: pro3-db-deployer
+    type: hdb
+    path: gen/db
+    parameters:
+      buildpack: nodejs_buildpack
+    properties:
+      TARGET_CONTAINER: ~{pro3-db/service-name}
+    requires:
+      - name: pro3-db
+      - name: global-grantor
+        group: SERVICE_REPLACEMENTS
+        properties:
+          key: logical-global-grantor
+          service: ~{global-grantor-service}
   - name: pro3-srv
     type: nodejs
     path: gen/srv
@@ -25,14 +39,6 @@ modules:
           srv-url: ${default-url}
     requires:
       - name: pro3-auth
-      - name: pro3-db
-
-  - name: pro3-db-deployer
-    type: hdb
-    path: gen/db
-    parameters:
-      buildpack: nodejs_buildpack
-    requires:
       - name: pro3-db
 
 resources:
@@ -54,3 +60,11 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
+    properties:
+      service-name: ${service-name}
+  - name: global-grantor
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service-name: pro2-db
+    properties:
+      global-grantor-service: ${service-name}
