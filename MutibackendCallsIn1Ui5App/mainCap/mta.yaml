@@ -26,6 +26,7 @@ modules:
     requires:
       - name: mainCap-db
       - name: mainCap-auth
+      - name: mainCap-destination
 
   - name: mainCap-db-deployer
     type: hdb
@@ -54,3 +55,9 @@ resources:
           credential-types:
             - "binding-secret"
             - "x509"
+
+  - name: mainCap-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite

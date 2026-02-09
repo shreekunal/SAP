@@ -1,0 +1,16 @@
+{
+  "requires": {
+    "OrdersServiceRemote": {
+      "kind": "odata",
+      "credentials": {
+        "url": "http://localhost:4004/odata/v4/orders"
+      }
+    },
+    "EmployeesServiceRemote": {
+      "kind": "odata",
+      "credentials": {
+        "url": "http://localhost:4005/odata/v4/employees"
+      }
+    }
+  }
+}
