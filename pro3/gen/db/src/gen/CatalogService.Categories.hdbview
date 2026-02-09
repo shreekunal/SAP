@@ -1,0 +1,9 @@
+VIEW CatalogService_Categories AS SELECT
+  Categories_0.ID,
+  Categories_0.createdAt,
+  Categories_0.createdBy,
+  Categories_0.modifiedAt,
+  Categories_0.modifiedBy,
+  Categories_0.name,
+  Categories_0.description
+FROM my_productCatalog_Categories AS Categories_0

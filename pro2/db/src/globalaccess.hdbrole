@@ -1,0 +1,15 @@
+{
+    "role": {
+        // namespace::role_identifier
+        "name": "my.orderShop::global_access",
+        "object_privileges": [
+            {
+                "name": "MY_ORDERSHOP_SALESORDERS",
+                "type": "TABLE",
+                "privileges": [
+                    "SELECT"
+                ]
+            }
+        ]
+    }
+}

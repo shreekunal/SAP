@@ -1,0 +1,16 @@
+VIEW CatalogService_Products AS SELECT
+  Products_0.ID,
+  Products_0.createdAt,
+  Products_0.createdBy,
+  Products_0.modifiedAt,
+  Products_0.modifiedBy,
+  Products_0.productCode,
+  Products_0.name,
+  Products_0.description,
+  Products_0.price,
+  Products_0.currency,
+  Products_0.unit,
+  Products_0.stockQuantity,
+  Products_0.isActive,
+  Products_0.category_ID
+FROM my_productCatalog_Products AS Products_0

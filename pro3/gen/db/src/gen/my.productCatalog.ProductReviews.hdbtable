@@ -1,0 +1,12 @@
+COLUMN TABLE my_productCatalog_ProductReviews (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt DATE,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  product_ID NVARCHAR(36),
+  rating INTEGER,
+  comment NVARCHAR(5000),
+  reviewer NVARCHAR(5000),
+  PRIMARY KEY(ID)
+)

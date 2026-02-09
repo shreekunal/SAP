@@ -1,0 +1,11 @@
+VIEW CatalogService_ProductReviews AS SELECT
+  ProductReviews_0.ID,
+  ProductReviews_0.createdAt,
+  ProductReviews_0.createdBy,
+  ProductReviews_0.modifiedAt,
+  ProductReviews_0.modifiedBy,
+  ProductReviews_0.product_ID,
+  ProductReviews_0.rating,
+  ProductReviews_0.comment,
+  ProductReviews_0.reviewer
+FROM my_productCatalog_ProductReviews AS ProductReviews_0

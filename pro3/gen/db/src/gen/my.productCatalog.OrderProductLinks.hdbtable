@@ -1,0 +1,12 @@
+COLUMN TABLE my_productCatalog_OrderProductLinks (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  orderItemId NVARCHAR(5000),
+  product_ID NVARCHAR(36),
+  quantity INTEGER,
+  unitPrice DECIMAL(10, 2),
+  PRIMARY KEY(ID)
+)

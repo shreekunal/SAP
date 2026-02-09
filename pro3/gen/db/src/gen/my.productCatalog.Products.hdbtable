@@ -1,0 +1,17 @@
+COLUMN TABLE my_productCatalog_Products (
+  ID NVARCHAR(36) NOT NULL,
+  createdAt TIMESTAMP,
+  createdBy NVARCHAR(255),
+  modifiedAt TIMESTAMP,
+  modifiedBy NVARCHAR(255),
+  productCode NVARCHAR(5000),
+  name NVARCHAR(5000),
+  description NVARCHAR(5000),
+  price DECIMAL(10, 2),
+  currency NVARCHAR(5000) DEFAULT 'USD',
+  unit NVARCHAR(5000),
+  stockQuantity INTEGER,
+  isActive BOOLEAN DEFAULT TRUE,
+  category_ID NVARCHAR(36),
+  PRIMARY KEY(ID)
+)

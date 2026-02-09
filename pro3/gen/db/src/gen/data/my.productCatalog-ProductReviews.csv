@@ -1,0 +1,11 @@
+ID,product_ID,rating,comment,reviewer,createdAt,createdBy,modifiedAt,modifiedBy
+201,101,5,Excellent mouse - very responsive,John Smith,2025-01-15,admin,2025-01-15,admin
+202,101,4,Good quality but a bit pricey,Sarah Johnson,2025-01-16,admin,2025-01-16,admin
+203,102,5,Fast charging works as advertised,Mike Wilson,2025-01-17,admin,2025-01-17,admin
+204,103,5,Very comfortable chair for long hours,Emma Davis,2025-01-18,admin,2025-01-18,admin
+205,104,4,Nice shirt good fit and color,Robert Brown,2025-01-19,admin,2025-01-19,admin
+206,105,5,Comprehensive and well written,Lisa Anderson,2025-01-20,admin,2025-01-20,admin
+207,106,5,Perfect for yoga classes,Patricia Miller,2025-01-21,admin,2025-01-21,admin
+208,107,4,Great taste but packaging could be better,James Taylor,2025-01-22,admin,2025-01-22,admin
+209,108,5,My skin looks amazing,Nancy Garcia,2025-01-23,admin,2025-01-23,admin
+210,109,5,Family loved it loads of fun,Michael Rodriguez,2025-01-24,admin,2025-01-24,admin

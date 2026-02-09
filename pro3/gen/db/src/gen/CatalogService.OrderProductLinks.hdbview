@@ -1,0 +1,11 @@
+VIEW CatalogService_OrderProductLinks AS SELECT
+  OrderProductLinks_0.ID,
+  OrderProductLinks_0.createdAt,
+  OrderProductLinks_0.createdBy,
+  OrderProductLinks_0.modifiedAt,
+  OrderProductLinks_0.modifiedBy,
+  OrderProductLinks_0.orderItemId,
+  OrderProductLinks_0.product_ID,
+  OrderProductLinks_0.quantity,
+  OrderProductLinks_0.unitPrice
+FROM my_productCatalog_OrderProductLinks AS OrderProductLinks_0

@@ -1,0 +1,11 @@
+ID,name,description,createdAt,createdBy,modifiedAt,modifiedBy
+1,Electronics,Electronic devices and gadgets,2025-01-01,admin,2025-01-01,admin
+2,Furniture,Home and office furniture,2025-01-02,admin,2025-01-02,admin
+3,Clothing,Apparel and fashion items,2025-01-03,admin,2025-01-03,admin
+4,Books,Physical and digital books,2025-01-04,admin,2025-01-04,admin
+5,Sports,Sports equipment and gear,2025-01-05,admin,2025-01-05,admin
+6,Food,Groceries and food items,2025-01-06,admin,2025-01-06,admin
+7,Beauty,Beauty and cosmetic products,2025-01-07,admin,2025-01-07,admin
+8,Toys,Toys and gaming items,2025-01-08,admin,2025-01-08,admin
+9,Home,Home appliances and accessories,2025-01-09,admin,2025-01-09,admin
+10,Automotive,Car accessories and parts,2025-01-10,admin,2025-01-10,admin

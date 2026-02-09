@@ -1,0 +1,51 @@
+{
+  "format_version": 1,
+  "imports": [
+    {
+      "target_table": "MY_PRODUCTCATALOG_PRODUCTS",
+      "source_data": {
+        "data_type": "CSV",
+        "file_name": "my.productCatalog-Products.csv",
+        "has_header": true,
+        "type_config": {
+          "delimiter": ","
+        }
+      },
+      "import_settings": {
+        "import_columns": [
+          "ID",
+          "PRODUCTCODE",
+          "NAME",
+          "DESCRIPTION",
+          "PRICE",
+          "CURRENCY",
+          "UNIT",
+          "STOCKQUANTITY",
+          "ISACTIVE",
+          "CATEGORY_ID",
+          "CREATEDAT",
+          "CREATEDBY",
+          "MODIFIEDAT",
+          "MODIFIEDBY"
+        ],
+        "include_filter": []
+      },
+      "column_mappings": {
+        "ID": "ID",
+        "PRODUCTCODE": "productCode",
+        "NAME": "name",
+        "DESCRIPTION": "description",
+        "PRICE": "price",
+        "CURRENCY": "currency",
+        "UNIT": "unit",
+        "STOCKQUANTITY": "stockQuantity",
+        "ISACTIVE": "isActive",
+        "CATEGORY_ID": "category_ID",
+        "CREATEDAT": "createdAt",
+        "CREATEDBY": "createdBy",
+        "MODIFIEDAT": "modifiedAt",
+        "MODIFIEDBY": "modifiedBy"
+      }
+    }
+  ]
+}
