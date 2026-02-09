@@ -28,24 +28,24 @@
         "kind": "odata",
         "credentials": { "destination": "devpro5" },
         "path": "/odata/v4/employees"
-      },
-      "[development]": {
-        "requires": {
-          "OrdersServiceRemote": {
-            "credentials": {
-              "destination": null,
-              "url": "http://localhost:4004/odata/v4/orders"
-            }
-          },
-          "EmployeesServiceRemote": {
-            "credentials": {
-              "destination": null,
-              "url": "http://localhost:4005/odata/v4/employees"
-            }
+      }
+    },
+    "[development]": {
+      "requires": {
+        "OrdersServiceRemote": {
+          "credentials": {
+            "destination": null,
+            "url": "http://localhost:4004/odata/v4/orders"
+          }
+        },
+        "EmployeesServiceRemote": {
+          "credentials": {
+            "destination": null,
+            "url": "http://localhost:4005/odata/v4/employees"
           }
         }
-      },
-      "[production]": { "auth": "xsuaa" }
-    }
+      }
+    },
+    "[production]": { "auth": "xsuaa" }
   }
 }
