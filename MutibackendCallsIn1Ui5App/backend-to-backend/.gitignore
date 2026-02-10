@@ -1,4 +1,4 @@
-# CAP pro1
+# CAP backend-to-backend
 _out
 *.db
 *.sqlite
@@ -32,3 +32,6 @@ mta_archives/
 
 # @cap-js/cds-typer
 @cds-models
+
+# auto generated wildcard
+.env1

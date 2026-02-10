@@ -1,5 +1,5 @@
 _schema-version: 3.3.0
-ID: mainCap
+ID: backend-to-backend
 version: 1.0.0
 description: "A simple CAP project."
 parameters:
@@ -11,7 +11,7 @@ build-parameters:
         - npm ci
         - npx cds build --production
 modules:
-  - name: mainCap-srv
+  - name: backend-to-backend-srv
     type: nodejs
     path: gen/srv
     parameters:
@@ -24,39 +24,24 @@ modules:
         properties:
           srv-url: ${default-url}
     requires:
-      - name: mainCap-db
-      - name: mainCap-auth
-      - name: mainCap-destination
-
-  - name: mainCap-db-deployer
-    type: hdb
-    path: gen/db
-    parameters:
-      buildpack: nodejs_buildpack
-    requires:
-      - name: mainCap-db
+      - name: backend-to-backend-auth
+      - name: backend-to-backend-destination
 
 resources:
-  - name: mainCap-db
-    type: com.sap.xs.hdi-container
-    parameters:
-      service: hana
-      service-plan: hdi-shared
-  - name: mainCap-auth
+  - name: backend-to-backend-auth
     type: org.cloudfoundry.managed-service
     parameters:
       service: xsuaa
       service-plan: application
       path: ./xs-security.json
       config:
-        xsappname: mainCap-${org}-${space}
+        xsappname: backend-to-backend-${org}-${space}
         tenant-mode: dedicated
         oauth2-configuration:
           credential-types:
             - "binding-secret"
             - "x509"
-
-  - name: mainCap-destination
+  - name: backend-to-backend-destination
     type: org.cloudfoundry.managed-service
     parameters:
       service: destination
