@@ -94,8 +94,7 @@
       },
       "EMPLOYEES": {
         "dataSource": "SecondaryService",
-        "settings": {
-        }
+        "settings": {}
       }
     },
     "resources": {
@@ -121,9 +120,7 @@
         {
           "name": "RouteView1",
           "pattern": ":?query:",
-          "target": [
-            "TargetView1"
-          ]
+          "target": ["TargetView1"]
         }
       ],
       "targets": {
