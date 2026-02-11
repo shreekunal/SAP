@@ -1,0 +1,44 @@
+{
+  "xsappname": "project1",
+  "tenant-mode": "dedicated",
+  "description": "Security profile of called application",
+
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Delete",
+      "description": "Delete access"
+    },
+    {
+      "name": "$XSAPPNAME.Create",
+      "description": "Create access"
+    },
+    {
+      "name": "$XSAPPNAME.Read",
+      "description": "Read access"
+    },
+    {
+      "name": "$XSAPPNAME.Update",
+      "description": "Update access"
+    }
+  ],
+
+  "role-templates": [
+    {
+      "name": "Viewer",
+      "description": "Read-only access",
+      "scope-references": [
+        "$XSAPPNAME.Read"
+      ]
+    },
+    {
+      "name": "Administrator",
+      "description": "Full access",
+      "scope-references": [
+        "$XSAPPNAME.Create",
+        "$XSAPPNAME.Update",
+        "$XSAPPNAME.Read",
+        "$XSAPPNAME.Delete"
+      ]
+    }
+  ]
+}

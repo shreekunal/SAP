@@ -1,0 +1,73 @@
+<mvc:View
+    controllerName="project1.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <content>
+            <Table
+                id="ordersTable"
+                items="{/Orders}"
+                growing="true"
+                growingThreshold="10"
+            >
+                <headerToolbar>
+                    <OverflowToolbar id="ordersToolbar">
+                        <Title
+                            id="ordersTitle"
+                            text="Orders (pro4)"
+                            level="H2"
+                        />
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column id="colOrderNo">
+                        <header>
+                            <Text
+                                id="txtOrderNo"
+                                text="Order No"
+                            />
+                        </header>
+                    </Column>
+                    <Column id="colAmount">
+                        <header>
+                            <Text
+                                id="txtAmount"
+                                text="Amount"
+                            />
+                        </header>
+                    </Column>
+                    <Column id="colCurrency">
+                        <header>
+                            <Text
+                                id="txtCurrency"
+                                text="Currency"
+                            />
+                        </header>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="ordersItem">
+                        <cells>
+                            <Text
+                                id="cellOrderNo"
+                                text="{OrderNo}"
+                            />
+                            <ObjectNumber
+                                id="cellAmount"
+                                number="{Amount}"
+                            />
+                            <Text
+                                id="cellCurrency"
+                                text="{Currency}"
+                            />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>
