@@ -95,7 +95,6 @@
       "EMPLOYEES": {
         "dataSource": "SecondaryService",
         "settings": {
-          "useBatch": false
         }
       }
     },
