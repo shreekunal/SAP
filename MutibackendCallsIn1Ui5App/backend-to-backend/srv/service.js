@@ -8,12 +8,17 @@ module.exports = class test extends cds.ApplicationService {
       let oDestination = await cloudSDK.getDestination('devpro4');
       let oRequestConfig = await cloudSDK.buildHttpRequest(oDestination);
       oRequestConfig.method = 'GET';
-      oRequestConfig.url = '/odata/v4/catalog/Items';
+      oRequestConfig.url = '/odata/v4/orders/Orders';
       oRequestConfig.headers['Content-Type'] = "application/json";
 
-      let response = await axios.request(oRequestConfig).catch((e) => { console.log(e) });
-      console.log(response);
-      return 'success'
+      try {
+        let response = await axios.request(oRequestConfig);
+        console.log('Response data:', JSON.stringify(response.data));
+        return response.data;
+      } catch (e) {
+        console.error('Error calling pro4:', e.response?.status, e.response?.data || e.message);
+        req.error(500, 'Failed to fetch data from pro4');
+      }
     })
     return super.init()
   }
