@@ -4,6 +4,7 @@
   "description": "A simple CAP project.",
   "dependencies": {
     "@sap-cloud-sdk/core": "^1.54.2",
+    "@sap-cloud-sdk/http-client": "^4.4.0",
     "@sap/cds": "^9",
     "@sap/xssec": "^4",
     "axios": "^1.13.5",
@@ -19,7 +20,6 @@
   "private": true,
   "cds": {
     "requires": {
-
       "destination-global": {
         "kind": "destination",
         "credentials": {

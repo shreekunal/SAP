@@ -1,25 +1,54 @@
-const cds = require('@sap/cds')
-const { SELECT } = require('@sap/cds/lib/ql/cds-ql')
-const cloudSDK = require('@sap-cloud-sdk/core')
-const axios = require('axios')
-module.exports = class test extends cds.ApplicationService {
-  init() {
-    this.on('getData', async (req) => {
-      let oDestination = await cloudSDK.getDestination('devpro4');
-      let oRequestConfig = await cloudSDK.buildHttpRequest(oDestination);
-      oRequestConfig.method = 'GET';
-      oRequestConfig.url = '/odata/v4/orders/Orders';
-      oRequestConfig.headers['Content-Type'] = "application/json";
+const cds = require("@sap/cds");
+const { executeHttpRequest } = require("@sap-cloud-sdk/http-client");
 
+module.exports = class test extends cds.ApplicationService {
+  async init() {
+
+    // =======================
+    // GET DATA
+    // =======================
+    this.on("getData", async (req) => {
       try {
-        let response = await axios.request(oRequestConfig);
-        console.log('Response data:', JSON.stringify(response.data));
+        const response = await executeHttpRequest(
+          { destinationName: "devpro4" },
+          {
+            method: "GET",
+            url: "/odata/v4/orders/Orders",
+          }
+        );
+
+        console.log("Response data:", JSON.stringify(response.data));
         return response.data;
       } catch (e) {
-        console.error('Error calling pro4:', e.response?.status, e.response?.data || e.message);
-        req.error(500, 'Failed to fetch data from pro4');
+        console.error(e.response?.data || e.message);
+        return req.error(500, "Failed to fetch orders from pro4");
       }
-    })
-    return super.init()
+    });
+
+    // =======================
+    // CREATE ORDER
+    // =======================
+    this.on("createOrder", async (req) => {
+      const { OrderNo, Amount, Currency } = req.data;
+
+      try {
+        const response = await executeHttpRequest(
+          { destinationName: "devpro4" },
+          {
+            method: "POST",
+            url: "/odata/v4/orders/Orders",
+            data: { OrderNo, Amount, Currency },
+          }
+        );
+
+        console.log("Created order:", JSON.stringify(response.data));
+        return JSON.stringify(response.data);
+      } catch (e) {
+        console.error(e.response?.data || e.message);
+        return req.error(500, "Failed to create order in pro4");
+      }
+    });
+
+    return super.init();
   }
-}
+};
