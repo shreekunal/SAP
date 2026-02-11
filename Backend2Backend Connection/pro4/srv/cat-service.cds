@@ -1,6 +1,6 @@
 using {my.orders} from '../db/schema';
 
-service OrdersService @(path: '/orders')@(requires: 'authenticated-user') {
+service OrdersService @(requires: 'authenticated-user') {
   entity Orders as projection on orders.Orders;
   action securityAction()                                                returns String;
   action getData()                                                       returns String;

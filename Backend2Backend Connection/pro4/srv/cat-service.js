@@ -16,13 +16,6 @@ module.exports = class OrdersService extends cds.ApplicationService {
       Update: req.user.is('Update'),
     });
 
-    this.before(['CREATE', 'UPDATE'], Orders, async (req) => {
-      console.log('Before CREATE/UPDATE Orders', req.data)
-    })
-    this.after('READ', Orders, async (orders, req) => {
-      console.log('After READ Orders', orders)
-    })
-
     // =======================
     // SECURITY ACTION
     // =======================

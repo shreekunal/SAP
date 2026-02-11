@@ -8,6 +8,16 @@
         title="{i18n>title}"
     >
         <content>
+            <FlexBox id="securityBox" direction="Row" alignItems="Center" class="sapUiSmallMargin">
+                <Button
+                    id="btnCheckRoles"
+                    text="Check Security Roles"
+                    press="onCheckSecurityRoles"
+                    type="Emphasized"
+                    class="sapUiSmallMarginEnd"
+                />
+                <Text id="txtRoles" text="{viewModel>/rolesText}" />
+            </FlexBox>
             <Table
                 id="ordersTable"
                 items="{/Orders}"
