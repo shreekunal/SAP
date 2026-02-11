@@ -2,5 +2,57 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
+        <content>
+            <IconTabBar id="idIconTabBar" class="sapUiResponsiveContentPadding">
+                <items>
+                    <IconTabFilter id="ordersTab" text="Orders" icon="sap-icon://sales-order" count="{/Orders/$count}">
+                        <Table id="ordersTable" items="{/Orders}" growing="true" growingThreshold="10">
+                            <headerToolbar>
+                                <OverflowToolbar id="ordersToolbar">
+                                    <Title id="ordersTitle" text="Orders (pro4)" level="H2" />
+                                </OverflowToolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column id="colOrderNo"><header><Text id="txtOrderNo" text="Order No" /></header></Column>
+                                <Column id="colAmount"><header><Text id="txtAmount" text="Amount" /></header></Column>
+                                <Column id="colCurrency"><header><Text id="txtCurrency" text="Currency" /></header></Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem id="ordersItem">
+                                    <cells>
+                                        <Text id="cellOrderNo" text="{OrderNo}" />
+                                        <ObjectNumber id="cellAmount" number="{Amount}" />
+                                        <Text id="cellCurrency" text="{Currency}" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </IconTabFilter>
+                    <IconTabFilter id="employeesTab" text="Employees" icon="sap-icon://employee">
+                        <Table id="employeesTable" items="{EMPLOYEES>/Employees}" growing="true" growingThreshold="10">
+                            <headerToolbar>
+                                <OverflowToolbar id="employeesToolbar">
+                                    <Title id="employeesTitle" text="Employees (pro5)" level="H2" />
+                                </OverflowToolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column id="colName"><header><Text id="txtName" text="Name" /></header></Column>
+                                <Column id="colRole"><header><Text id="txtRole" text="Role" /></header></Column>
+                                <Column id="colEmail"><header><Text id="txtEmail" text="Email" /></header></Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem id="employeesItem">
+                                    <cells>
+                                        <Text id="cellName" text="{EMPLOYEES>Name}" />
+                                        <Text id="cellRole" text="{EMPLOYEES>Role}" />
+                                        <Text id="cellEmail" text="{EMPLOYEES>Email}" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </content>
     </Page>
 </mvc:View>
