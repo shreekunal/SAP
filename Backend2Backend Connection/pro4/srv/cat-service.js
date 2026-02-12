@@ -67,6 +67,43 @@ module.exports = class OrdersService extends cds.ApplicationService {
       }
     })
 
+    // =======================
+    // TRIGGER ORDER WORKFLOW (SAP Build Process Automation)
+    // =======================
+    this.on('triggerOrderWorkflow', async (req) => {
+      const { OrderNo, Amount, Currency } = req.data;
+
+      const oPayload = {
+        "definitionId": "us10.058e1c82trial.salesordersmanagement.orderProcessing",
+        "context": {
+          "id": 0,
+          "orderno": OrderNo || "",
+          "amount": Amount || 0,
+          "currency": Currency || ""
+        }
+      };
+
+      console.log('Workflow Payload:', JSON.stringify(oPayload));
+
+      try {
+        const destination = await cds.connect.to('spa_process_destination');
+        if (!destination) {
+          throw new Error('Destination service not found.');
+        }
+
+        const sURL = "/workflow/rest/v1/workflow-instances";
+        const result = await destination.send('POST', sURL, oPayload, {
+          "Content-Type": "application/json"
+        });
+
+        console.log('Workflow triggered successfully:', JSON.stringify(result));
+        return JSON.stringify(result);
+      } catch (e) {
+        console.error('Error triggering workflow:', e.message);
+        return req.error(500, `Failed to trigger workflow: ${e.message}`);
+      }
+    })
+
     return super.init()
   }
 }

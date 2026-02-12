@@ -10,6 +10,8 @@
                             <headerToolbar>
                                 <OverflowToolbar id="ordersToolbar">
                                     <Title id="ordersTitle" text="Orders (pro4)" level="H2" />
+                                    <ToolbarSpacer id="ordersSpacer" />
+                                    <Button id="btnTriggerWorkflow" text="Trigger Workflow" icon="sap-icon://process" type="Emphasized" press=".onTriggerWorkflow" />
                                 </OverflowToolbar>
                             </headerToolbar>
                             <columns>
