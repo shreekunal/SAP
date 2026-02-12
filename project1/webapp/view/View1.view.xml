@@ -5,7 +5,7 @@
 >
     <Page
         id="page"
-        title="{i18n>title}"
+        title="New 2"
     >
         <content>
             <Table
