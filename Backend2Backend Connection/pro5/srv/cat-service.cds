@@ -4,5 +4,5 @@ service EmployeesService {
   entity Employees as projection on employees.Employees;
 
   // Action to trigger SAP Build Process Automation workflow
-  action triggerWorkflow() returns String;
+  action triggerWorkflow(orderId: String, orderNo: String, amount: Decimal, currency: String) returns String;
 }

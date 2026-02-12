@@ -20,12 +20,6 @@
     "requires": {
       "[production]": {
         "auth": "xsuaa"
-      },
-      "spa_process_destination": {
-        "kind": "rest",
-        "credentials": {
-          "destination": "spa_process_destination"
-        }
       }
     }
   }

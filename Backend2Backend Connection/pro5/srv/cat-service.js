@@ -2,7 +2,7 @@ const cds = require('@sap/cds')
 const { executeHttpRequest } = require('@sap-cloud-sdk/http-client')
 
 module.exports = class EmployeesService extends cds.ApplicationService {
-  init() {
+  async init() {
 
     const { Employees } = cds.entities('EmployeesService')
 
@@ -13,38 +13,44 @@ module.exports = class EmployeesService extends cds.ApplicationService {
       console.log('After READ Employees', employees)
     })
 
-    // Action: Trigger SAP Build Process Automation workflow
+    // =======================
+    // TRIGGER BPA WORKFLOW
+    // =======================
     this.on('triggerWorkflow', async (req) => {
+      const { orderId, orderNo, amount, currency } = req.data;
+
+      if (!orderId) {
+        return req.error(400, 'orderId is required');
+      }
+
+      const oPayload = {
+        definitionId: 'us10.058e1c82trial.salesordersmanagement.orderProcessing',
+        context: {
+          id: parseInt(orderId) || 0,
+          orderno: orderNo || '',
+          amount: parseFloat(amount) || 0,
+          currency: currency || 'USD'
+        }
+      };
+
+      console.log('Workflow Payload:', JSON.stringify(oPayload));
+
       try {
-        // Static payload for the BPA workflow
-        const oPayload = {
-          "definitionId": "us10.058e1c82trial.salesordersmanagement.orderProcessing",
-          "context": {
-            "id": 1004,
-            "orderno": "OD-1001",
-            "amount": 0,
-            "currency": "USD"
-          }
-        };
-
-        console.log('Workflow Payload:', JSON.stringify(oPayload));
-
-        // Use SAP Cloud SDK to call the destination directly (avoids CDS path duplication)
         const response = await executeHttpRequest(
           { destinationName: 'spa_process_destination' },
           {
             method: 'POST',
+            url: '/',
             data: oPayload,
             headers: { 'Content-Type': 'application/json' }
           }
         );
 
         console.log('Workflow triggered successfully:', JSON.stringify(response.data));
-        return JSON.stringify(response.data);
-
+        return response.data.id; // workflow instance id
       } catch (error) {
-        console.error('Error triggering workflow:', error.message);
-        req.error(500, `Failed to trigger workflow: ${error.message}`);
+        console.error('Error triggering workflow:', error.response?.data || error.message);
+        return req.error(500, `Failed to trigger workflow: ${error.message}`);
       }
     })
 
