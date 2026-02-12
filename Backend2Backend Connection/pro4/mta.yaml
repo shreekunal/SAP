@@ -26,6 +26,7 @@ modules:
     requires:
       - name: pro4-db
       - name: pro4-auth
+      - name: pro4-destination
 
   - name: pro4-db-deployer
     type: hdb
@@ -54,3 +55,8 @@ resources:
           credential-types:
             - "binding-secret"
             - "x509"
+  - name: pro4-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
