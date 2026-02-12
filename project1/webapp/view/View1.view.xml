@@ -23,6 +23,7 @@
                 items="{/Orders}"
                 growing="true"
                 growingThreshold="10"
+                visible="{viewModel>/hasReadAccess}"
             >
                 <headerToolbar>
                     <OverflowToolbar id="ordersToolbar">
