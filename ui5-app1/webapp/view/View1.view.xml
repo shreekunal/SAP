@@ -90,9 +90,10 @@
                             <Label id="lblCurrency" text="Currency" class="sapUiSmallMarginTop" />
                             <Input id="currencyInput" placeholder="e.g. USD" value="USD"
                                 width="300px" />
-                            <Button id="btnTriggerBPA" text="Trigger Workflow" type="Emphasized"
-                                icon="sap-icon://initiative" press=".onTriggerBPA"
-                                class="sapUiSmallMarginTop" />
+                            <HBox id="bpaButtonBox" class="sapUiSmallMarginTop">
+                                <Button id="btnTriggerBPA" text="Trigger Workflow" type="Emphasized"
+                                    icon="sap-icon://initiative" press=".onTriggerBPA" />
+                            </HBox>
                             <Text id="bpaResultText" text="" class="sapUiSmallMarginTop" />
                         </VBox>
                     </IconTabFilter>

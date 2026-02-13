@@ -29,7 +29,8 @@ module.exports = class EmployeesService extends cds.ApplicationService {
           id: parseInt(orderId) || 0,
           orderno: orderNo || '',
           amount: parseFloat(amount) || 0,
-          currency: currency || 'USD'
+          currency: currency || 'USD',
+          status: 'Initiated'
         }
       };
 
@@ -42,7 +43,8 @@ module.exports = class EmployeesService extends cds.ApplicationService {
             method: 'POST',
             url: '/',
             data: oPayload,
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            fetchCsrfToken: false
           }
         );
 
@@ -51,6 +53,78 @@ module.exports = class EmployeesService extends cds.ApplicationService {
       } catch (error) {
         console.error('Error triggering workflow:', error.response?.data || error.message);
         return req.error(500, `Failed to trigger workflow: ${error.message}`);
+      }
+    })
+
+    // =======================
+    // ACCEPT WORKFLOW (called by BPA)
+    // =======================
+    this.on('acceptWorkflow', async (req) => {
+      const { instanceId } = req.data;
+
+      if (!instanceId) {
+        return req.error(400, 'instanceId is required');
+      }
+
+      const updatePayload = {
+        status: 'Accepted'
+      };
+
+      console.log(`Updating workflow instance ${instanceId} to Accepted`);
+
+      try {
+        const response = await executeHttpRequest(
+          { destinationName: 'spa_process_destination' },
+          {
+            method: 'PATCH',
+            url: `/${instanceId}/context`,
+            data: updatePayload,
+            headers: { 'Content-Type': 'application/json' },
+            fetchCsrfToken: false
+          }
+        );
+
+        console.log('Workflow context updated to Accepted:', JSON.stringify(response.data));
+        return `Workflow instance ${instanceId} context updated to Accepted`;
+      } catch (error) {
+        console.error('Error updating workflow to Accepted:', error.response?.data || error.message);
+        return req.error(500, `Failed to update workflow: ${error.message}`);
+      }
+    })
+
+    // =======================
+    // REJECT WORKFLOW (called by BPA)
+    // =======================
+    this.on('rejectWorkflow', async (req) => {
+      const { instanceId } = req.data;
+
+      if (!instanceId) {
+        return req.error(400, 'instanceId is required');
+      }
+
+      const updatePayload = {
+        status: 'Rejected'
+      };
+
+      console.log(`Updating workflow instance ${instanceId} to Rejected`);
+
+      try {
+        const response = await executeHttpRequest(
+          { destinationName: 'spa_process_destination' },
+          {
+            method: 'PATCH',
+            url: `/${instanceId}/context`,
+            data: updatePayload,
+            headers: { 'Content-Type': 'application/json' },
+            fetchCsrfToken: false
+          }
+        );
+
+        console.log('Workflow context updated to Rejected:', JSON.stringify(response.data));
+        return `Workflow instance ${instanceId} context updated to Rejected`;
+      } catch (error) {
+        console.error('Error updating workflow to Rejected:', error.response?.data || error.message);
+        return req.error(500, `Failed to update workflow: ${error.message}`);
       }
     })
 
