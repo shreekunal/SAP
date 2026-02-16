@@ -369,22 +369,6 @@ sap.ui.define(["sap/fe/core/PageController"], function (PageController) {
 
 ---
 
-### **STEP 5: Update i18n (Optional)**
-
-**File:** `app/project1/webapp/i18n/i18n.properties`
-
-```properties
-appTitle=Product Catalog
-appDescription=Hybrid SAP Fiori Application - Product Catalog Management
-
-homeTitle=Dashboard
-categoriesTitle=Categories
-productsTitle=Products
-reviewsTitle=Product Reviews
-```
-
----
-
 ## 🗂️ Final Project Structure
 
 ```
@@ -413,34 +397,6 @@ pro3/
 
 ---
 
-## ⚙️ Deployment & Testing
-
-### 1. Deploy Database Schema
-
-```bash
-cd /home/shrik/Work/SAP/pro3
-cds deploy --to sqlite
-```
-
-### 2. Start CAP Server
-
-```bash
-cds watch
-```
-
-### 3. Access Application
-
-Open browser: `http://localhost:4004/project1/webapp/index.html`
-
-**Expected Behavior:**
-
-- Home page renders (Freestyle dashboard with tiles)
-- Click "Categories" → FE ListReport page
-- Click a category → FE ObjectPage
-- Click "Products" → FE ListReport page
-- Navigation works seamlessly between Freestyle and FE pages
-
----
 
 ## 🐛 Common Issues & Solutions
 
@@ -495,59 +451,6 @@ sap.ui.define(["sap/fe/core/AppComponent"], function (AppComponent) {
   }
 }
 ```
-
----
-
-### Issue 4: "No such table: CatalogService_Categories"
-
-**Cause:** Database not deployed
-
-**Solution:**
-
-```bash
-cds deploy --to sqlite
-```
-
----
-
-### Issue 5: Component-preload.js 404 Error
-
-**Status:** ✅ **Harmless dev-mode warning**
-
-**Explanation:** UI5 tries to load production bundle first, fails, then loads Component.js. This is normal in local development.
-
-**Action:** Ignore - app will still work perfectly.
-
----
-
-### Issue 6: lrep/flex 404 Errors
-
-**Status:** ✅ **Harmless dev-mode warning**
-
-**Explanation:** SAP Fiori Launchpad flexibility services don't exist on local CAP server.
-
-**Action:** Ignore - only relevant in BTP deployment.
-
----
-
-## 🎯 Key Takeaways for Interviews
-
-When asked about **Hybrid Fiori Applications**, you can say:
-
-> **"I designed a procurement/catalog system using:**
->
-> - **Freestyle SAPUI5** for the dashboard landing page with custom navigation tiles
-> - **Fiori Elements V4** (ListReport & ObjectPage templates) for annotation-driven CRUD operations
-> - Integrated both paradigms using **sap.fe.core.AppComponent** with **Flexible Programming Model (FPM)**
-> - Configured hybrid routing in manifest.json with Component-type targets
-> - Used OData V4 annotations for automatic UI generation of transactional pages
-> - Implemented seamless navigation between freestyle and template-based pages"\*\*
-
-This demonstrates:
-✅ Deep understanding of SAP Fiori architecture  
-✅ Knowledge of both Freestyle UI5 and Fiori Elements  
-✅ Ability to build real enterprise-grade applications  
-✅ Experience with CAP, OData V4, and UI annotations
 
 ---
 
