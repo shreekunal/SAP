@@ -2,7 +2,7 @@ sap.ui.define(
     [
         'sap/fe/core/PageController'
     ],
-    function(PageController) {
+    function (PageController) {
         'use strict';
 
         return PageController.extend('hybrid2usingpro3.ext.main.Main', {
@@ -41,7 +41,7 @@ sap.ui.define(
             //
             //  },
 
-            onNavProducts: function() {
+            onNavProducts: function () {
                 // Navigate to Products page - to be implemented later
                 console.log("Navigate to Products");
                 // this.getOwnerComponent().getRouter().navTo("Products");
