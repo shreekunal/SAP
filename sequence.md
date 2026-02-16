@@ -10,10 +10,6 @@ Sequences in SAP CAP are used to generate unique, incremental numeric values, ty
 - **Helper Class**: `pro2/srv/sequence-helper.js`
 - **Usage in Service**: `pro2/srv/cat-service.js`
 
-OD-10000 +1
-OD-10001
-OD-10002
-
 ## Steps to Implement or Modify a Sequence
 
 ### Step 1: Define the Sequence in .hdbsequence File

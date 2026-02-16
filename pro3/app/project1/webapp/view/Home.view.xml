@@ -1,0 +1,106 @@
+<mvc:View
+    controllerName="project1.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    height="100%">
+
+    <Page id="homePage" title="Product Catalog Dashboard" showNavButton="false">
+        <content>
+            <VBox class="sapUiMediumMargin" alignItems="Start">
+
+                <!-- Welcome Section -->
+                <VBox class="sapUiMediumMarginBottom">
+                    <Title text="Welcome to Product Catalog" level="H2"
+                        class="sapUiSmallMarginBottom" />
+                    <Text
+                        text="Manage your product catalog with Categories, Products, and Reviews. Select an option below to get started."
+                        class="sapUiSmallMarginBottom" />
+                </VBox>
+
+                <!-- Navigation Tiles -->
+                <HBox wrap="Wrap" class="sapUiSmallMarginBottom">
+
+                    <!-- Categories Tile -->
+                    <GenericTile
+                        header="Categories"
+                        subheader="Manage product categories"
+                        press="onNavCategories"
+                        class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                        <TileContent>
+                            <ImageContent src="sap-icon://folder-full" />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- Products Tile -->
+                    <GenericTile
+                        header="Products"
+                        subheader="Manage products inventory"
+                        press="onNavProducts"
+                        class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                        <TileContent>
+                            <ImageContent src="sap-icon://product" />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- Reviews Tile -->
+                    <GenericTile
+                        header="Reviews"
+                        subheader="View all product reviews"
+                        press="onNavReviews"
+                        class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                        <TileContent>
+                            <ImageContent src="sap-icon://favorite" />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- Order Links Tile -->
+                    <GenericTile
+                        header="Order Links"
+                        subheader="Product-Order associations"
+                        press="onNavOrderLinks"
+                        class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
+                        <TileContent>
+                            <ImageContent src="sap-icon://sales-order" />
+                        </TileContent>
+                    </GenericTile>
+
+                </HBox>
+
+                <!-- Quick Actions Section -->
+                <VBox class="sapUiLargeMarginTop">
+                    <Title text="Quick Actions" level="H3" class="sapUiSmallMarginBottom" />
+                    <HBox wrap="Wrap">
+                        <Button
+                            text="Manage Categories"
+                            type="Emphasized"
+                            icon="sap-icon://folder-full"
+                            press="onNavCategories"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom" />
+                        <Button
+                            text="Manage Products"
+                            type="Default"
+                            icon="sap-icon://product"
+                            press="onNavProducts"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom" />
+                        <Button
+                            text="View Reviews"
+                            type="Default"
+                            icon="sap-icon://favorite"
+                            press="onNavReviews"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom" />
+                        <Button
+                            text="Order Links"
+                            type="Default"
+                            icon="sap-icon://sales-order"
+                            press="onNavOrderLinks"
+                            class="sapUiSmallMarginBottom" />
+                    </HBox>
+                </VBox>
+
+            </VBox>
+        </content>
+    </Page>
+
+</mvc:View>
