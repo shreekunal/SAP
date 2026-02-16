@@ -1,0 +1,14 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:macros="sap.fe.macros"
+    xmlns:html="http://www.w3.org/1999/xhtml" controllerName="hybrid2usingpro3.ext.main.Main">
+    <Page id="Main" title="{i18n>MainTitle}">
+        <content>
+            <VBox id="mainVBox" class="sapUiMediumMargin">
+                <Title id="welcomeTitle" text="Welcome to Product Catalog 👋" level="H1"/>
+
+                <Button id="navProductsButton" text="Go to Products"
+                        press="onNavProducts"
+                        type="Emphasized"/>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>
