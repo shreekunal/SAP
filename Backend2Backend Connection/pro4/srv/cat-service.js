@@ -1,5 +1,6 @@
 const cds = require('@sap/cds')
 const { SELECT, INSERT } = require('@sap/cds/lib/ql/cds-ql')
+const { executeHttpRequest } = require('@sap-cloud-sdk/http-client')
 
 module.exports = class OrdersService extends cds.ApplicationService {
   async init() {
@@ -14,6 +15,7 @@ module.exports = class OrdersService extends cds.ApplicationService {
       Create: req.user.is('Create'),
       Delete: req.user.is('Delete'),
       Update: req.user.is('Update'),
+      Display: req.user.is('Display'),
     });
 
     // =======================
@@ -64,6 +66,37 @@ module.exports = class OrdersService extends cds.ApplicationService {
       } catch (e) {
         console.error('Error creating order:', e.message);
         return req.error(500, 'Failed to create order');
+      }
+    })
+
+    // =======================
+    // SAY HI (requires Read scope)
+    // =======================
+    this.on('sayHi', async (req) => {
+      return `Hi ${req.data.name}`
+    })
+
+    // =======================
+    // ADD RECORD TO DESTINATION TABLE (requires Create scope)
+    // =======================
+    this.on('addRecordToDestinationTableBooks', async (req) => {
+      const { ID, title, stock } = req.data.payload
+
+      if (!ID || !title) return req.error(400, 'ID and title are required')
+
+      try {
+        const response = await executeHttpRequest(
+          { destinationName: 'test-app-1-dest' },
+          {
+            method: 'POST',
+            url: '/odata/v4/catalog/Books',
+            data: { ID, title, stock },
+          }
+        )
+        return JSON.stringify(response.data)
+      } catch (e) {
+        console.error(e.response?.data || e.message)
+        return req.error(500, 'Failed to insert book')
       }
     })
 

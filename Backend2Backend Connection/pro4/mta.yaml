@@ -21,12 +21,13 @@ modules:
       builder: npm-ci
     provides:
       - name: srv-api # required by consumers of CAP services (e.g. approuter)
+        public: true
         properties:
           srv-url: ${default-url}
     requires:
-      - name: pro4-db
       - name: pro4-auth
       - name: pro4-destination
+      - name: pro4-db
 
   - name: pro4-db-deployer
     type: hdb

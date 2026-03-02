@@ -1,73 +1,171 @@
-<mvc:View
-    controllerName="project1.controller.View1"
+<mvc:View controllerName="project1.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m"
->
-    <Page
-        id="page"
-        title="New 2"
-    >
+    xmlns="sap.m">
+
+    <Page id="page" title="Orders - pro4" class="sapUiResponsiveContentPadding">
+
         <content>
-            <Table
-                id="ordersTable"
-                items="{/Orders}"
-                growing="true"
-                growingThreshold="10"
-            >
-                <headerToolbar>
-                    <OverflowToolbar id="ordersToolbar">
-                        <Title
-                            id="ordersTitle"
-                            text="Orders (pro4)"
-                            level="H2"
-                        />
-                    </OverflowToolbar>
-                </headerToolbar>
-                <columns>
-                    <Column id="colOrderNo">
-                        <header>
-                            <Text
-                                id="txtOrderNo"
-                                text="Order No"
+            <VBox class="sapUiMediumMargin" width="100%">
+
+                <!-- ═══════════════════════════════════════ -->
+                <!--             ORDERS TABLE SECTION       -->
+                <!-- ═══════════════════════════════════════ -->
+                <Panel headerText="Orders" expandable="true" expanded="true"
+                    class="sapUiSmallMarginBottom">
+                    <content>
+                        <Table
+                            id="ordersTable"
+                            items="{/Orders}"
+                            growing="true"
+                            growingThreshold="10"
+                            class="sapUiSmallMargin">
+                            <headerToolbar>
+                                <OverflowToolbar id="ordersToolbar">
+                                    <Title id="ordersTitle" text="Orders (pro4)" level="H2" />
+                                </OverflowToolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column id="colOrderNo">
+                                    <header>
+                                        <Text id="txtOrderNo" text="Order No" />
+                                    </header>
+                                </Column>
+                                <Column id="colAmount">
+                                    <header>
+                                        <Text id="txtAmount" text="Amount" />
+                                    </header>
+                                </Column>
+                                <Column id="colCurrency">
+                                    <header>
+                                        <Text id="txtCurrency" text="Currency" />
+                                    </header>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem id="ordersItem">
+                                    <cells>
+                                        <Text id="cellOrderNo" text="{OrderNo}" />
+                                        <ObjectNumber id="cellAmount" number="{Amount}" />
+                                        <Text id="cellCurrency" text="{Currency}" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </content>
+                </Panel>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!--           CREATE ORDER SECTION         -->
+                <!-- ═══════════════════════════════════════ -->
+                <Panel headerText="Create Order" expandable="true" expanded="true"
+                    class="sapUiSmallMarginBottom">
+                    <content>
+                        <VBox class="sapUiSmallMargin">
+                            <HBox wrap="Wrap" alignItems="Center">
+                                <VBox class="sapUiSmallMarginEnd">
+                                    <Label text="Order No" class="sapUiTinyMarginBottom" />
+                                    <Input id="newOrderNo" placeholder="e.g. ORD-001" width="180px" />
+                                </VBox>
+                                <VBox class="sapUiSmallMarginEnd">
+                                    <Label text="Amount" class="sapUiTinyMarginBottom" />
+                                    <Input id="newAmount" placeholder="e.g. 500" width="150px" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Currency" class="sapUiTinyMarginBottom" />
+                                    <Input id="newCurrency" placeholder="e.g. USD" width="120px" />
+                                </VBox>
+                            </HBox>
+                            <Button
+                                text="Create Order"
+                                type="Emphasized"
+                                press="onCreateOrder"
+                                icon="sap-icon://add"
+                                class="sapUiTinyMarginTop"
                             />
-                        </header>
-                    </Column>
-                    <Column id="colAmount">
-                        <header>
-                            <Text
-                                id="txtAmount"
-                                text="Amount"
+                            <Text id="createOrderResult" text="" class="sapUiTinyMarginTop" />
+                        </VBox>
+                    </content>
+                </Panel>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!--               SAY HI SECTION           -->
+                <!-- ═══════════════════════════════════════ -->
+                <Panel headerText="Test Service" expandable="true" expanded="true"
+                    class="sapUiSmallMarginBottom">
+                    <content>
+                        <VBox class="sapUiSmallMargin">
+                            <Label text="Your Name" class="sapUiTinyMarginBottom" />
+                            <HBox alignItems="Center">
+                                <Input id="nameInput" placeholder="Enter your name" value=""
+                                    width="250px" />
+                                <Button
+                                    text="Call sayHi"
+                                    type="Emphasized"
+                                    press="onCallSayHi"
+                                    class="sapUiSmallMarginBegin"
+                                    icon="sap-icon://hello-world"
+                                />
+                            </HBox>
+                            <Text id="sayHiResult" text="" class="sapUiTinyMarginTop" />
+                        </VBox>
+                    </content>
+                </Panel>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!--        ADD BOOK TO DESTINATION         -->
+                <!-- ═══════════════════════════════════════ -->
+                <Panel headerText="Add Book to Destination" expandable="true" expanded="true"
+                    class="sapUiSmallMarginBottom">
+                    <content>
+                        <VBox class="sapUiSmallMargin">
+                            <HBox wrap="Wrap" alignItems="Center">
+                                <VBox class="sapUiSmallMarginEnd">
+                                    <Label text="ID" class="sapUiTinyMarginBottom" />
+                                    <Input id="bookId" placeholder="e.g. 1" width="100px" />
+                                </VBox>
+                                <VBox class="sapUiSmallMarginEnd">
+                                    <Label text="Title" class="sapUiTinyMarginBottom" />
+                                    <Input id="bookTitle" placeholder="e.g. My Book" width="200px" />
+                                </VBox>
+                                <VBox>
+                                    <Label text="Stock" class="sapUiTinyMarginBottom" />
+                                    <Input id="bookStock" placeholder="e.g. 10" width="100px" />
+                                </VBox>
+                            </HBox>
+                            <Button
+                                text="Add Book"
+                                type="Emphasized"
+                                press="onAddBook"
+                                icon="sap-icon://add-document"
+                                class="sapUiTinyMarginTop"
                             />
-                        </header>
-                    </Column>
-                    <Column id="colCurrency">
-                        <header>
-                            <Text
-                                id="txtCurrency"
-                                text="Currency"
+                            <Text id="addBookResult" text="" class="sapUiTinyMarginTop" />
+                        </VBox>
+                    </content>
+                </Panel>
+
+                <!-- ═══════════════════════════════════════ -->
+                <!--           SECURITY SCOPES SECTION      -->
+                <!-- ═══════════════════════════════════════ -->
+                <Panel headerText="Security Scopes" expandable="true" expanded="true"
+                    class="sapUiSmallMarginBottom">
+                    <content>
+                        <VBox class="sapUiSmallMargin">
+                            <Text text="Check which XSUAA scopes are assigned to the current user."
+                                class="sapUiTinyMarginBottom" />
+                            <Button
+                                text="Check My Scopes"
+                                type="Emphasized"
+                                press="onCheckSecurity"
+                                icon="sap-icon://locked"
                             />
-                        </header>
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem id="ordersItem">
-                        <cells>
-                            <Text
-                                id="cellOrderNo"
-                                text="{OrderNo}"
-                            />
-                            <ObjectNumber
-                                id="cellAmount"
-                                number="{Amount}"
-                            />
-                            <Text
-                                id="cellCurrency"
-                                text="{Currency}"
-                            />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
+                            <Text id="securityResult" text="" class="sapUiTinyMarginTop" />
+                        </VBox>
+                    </content>
+                </Panel>
+
+            </VBox>
         </content>
+
     </Page>
 </mvc:View>

@@ -1,10 +1,15 @@
 {
   "name": "pro4",
   "version": "1.0.0",
+  "description": "A simple CAP project.",
   "dependencies": {
     "@cap-js/hana": "^2",
+    "@sap-cloud-sdk/core": "^1.54.2",
+    "@sap-cloud-sdk/http-client": "^4.4.0",
     "@sap/cds": "^9",
-    "@sap/xssec": "^4"
+    "@sap/xssec": "^4",
+    "axios": "^1.13.5",
+    "express": "^4"
   },
   "devDependencies": {
     "@cap-js/sqlite": "^2",
@@ -17,8 +22,16 @@
   "cds": {
     "requires": {
       "[production]": {
-        "auth": "xsuaa"
-      }
+        "auth": {
+          "passport": {
+            "strategy": "JWT"
+          }
+        },
+        "uaa": {
+          "kind": "xsuaa"
+        }
+      },
+      "destinations": true
     }
   }
 }
